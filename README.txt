@@ -1,0 +1,1 @@
+echo "# Crotalia - App de Gestión" > README.md
