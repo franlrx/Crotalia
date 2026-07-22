@@ -1,0 +1,33 @@
+{% extends 'ganaderia/base.html' %}
+
+{% block content %}
+    <h2>Lista de Inseminaciones</h2>
+
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Fecha</th>
+                <th>Vaca (Nº Casa)</th>
+                <th>Toro</th>
+                <th>Estado</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for inseminacion in inseminaciones %}
+            <tr>
+                <td>{{ inseminacion.fecha }}</td>
+                <td>{{ inseminacion.vaca.numero_casa }}</td>
+                <td>{{ inseminacion.toro|default:"No especificado" }}</td>
+                <td>{{ inseminacion.estado }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4">No hay inseminaciones registradas en esta granja.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <br>
+    <a href="{% url 'ganaderia:inicio' %}">Volver al menú principal</a>
+{% endblock %}

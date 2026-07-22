@@ -1,0 +1,23 @@
+{% extends 'ganaderia/base.html' %}
+
+{% block content %}
+
+    <h2>Bienvenido a {{ request.user.perfil.granja.nombre }}</h2>
+
+    <div>
+        <a href="{% url 'ganaderia:lista_vacas' %}">Lista de Vacas</a>
+    </div>
+    
+    <div>
+        <a href="{% url 'ganaderia:lista_inseminaciones' %}">Lista de Inseminaciones</a>
+    </div>
+    
+    <div>
+        <a href="{% url 'ganaderia:lista_estimaciones' %}">Estimaciones (Secado/Parto)</a>
+    </div>
+    
+    <div>
+        <a href="{% url 'ganaderia:lista_partos' %}">Lista de Partos</a>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Crotalia - Gestión Ganadera</title>
+</head>
+<body>
+
+    <header>
+        <div>
+            <h1>Crotalia</h1>
+        </div>
+        
+        <form action="{% url 'ganaderia:buscar_vaca' %}" method="GET">
+            <input type="text" name="q" placeholder="Nº de Casa (Ej: 12B)" required>
+            <button type="submit">Buscar Vaca</button>
+        </form>
+    </header>
+
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+</body>
+</html>
