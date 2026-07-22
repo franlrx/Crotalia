@@ -13,4 +13,13 @@ urlpatterns = [
     
     # Ruta para las inseminaciones (Ej: 127.0.0.1:8000/inseminaciones/)
     path('inseminaciones/', views.lista_inseminaciones, name='lista_inseminaciones'),
+
+    # Ruta para la página de inicio (Ej: 127.0.0.1:8000/inicio/)
+    path('', views.inicio, name='inicio'), 
+
+    # Ruta para la página de estimaciones (Ej: 127.0.0.1:8000/estimaciones/)
+    path('estimaciones/', views.lista_estimaciones, name='lista_estimaciones'),
+
+    # Ruta para la página de búsqueda de vacas (Ej: 127.0.0.1:8000/buscar/)
+    path('buscar/', views.buscar_vaca, name='buscar_vaca'),
 ]
