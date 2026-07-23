@@ -1,26 +1,104 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <title>Crotalia - Gestión Ganadera</title>
+    <link rel="stylesheet" href="{% static 'ganaderia/css/estilos.css' %}">
 </head>
 <body>
 
+    <!-- CABECERA PRINCIPAL -->
     <header>
-        <div>
-            <h1>Crotalia</h1>
-        </div>
-        
-        <form action="{% url 'ganaderia:buscar_vaca' %}" method="GET">
-            <input type="text" name="q" placeholder="Nº de Casa (Ej: 12B)" required>
-            <button type="submit">Buscar Vaca</button>
-        </form>
+        <table width="100%">
+            <tr>
+                <!-- Zona Izquierda: Logo imagen estática -->
+                <td align="left">
+                    <a href="{% url 'ganaderia:inicio' %}">
+                        <img src="{% static 'ganaderia/images/logo_crotalia.png' %}" alt="Logo Crotalia" height="90">
+                    </a>
+                </td>
+                
+                <!-- Zona Centro: Buscador -->
+                <td align="center">
+                    <form action="{% url 'ganaderia:buscar_vaca' %}" method="GET">
+                        <label for="input_buscar"><strong>Buscar Vaca:</strong></label>
+                        <input type="text" id="input_buscar" name="q" placeholder="Nº de Casa (Ej: 12B)" required>
+                        <button type="submit">Buscar</button>
+                    </form>
+                </td>
+
+                <!-- Zona Derecha: Botón de Cerrar Sesión -->
+                <td align="right">
+                    <form action="{% url 'admin:logout' %}?next=/" method="POST">
+                        {% csrf_token %}
+                        <button type="submit">Cerrar Sesión</button>
+                    </form>
+                </td>
+            </tr>
+        </table>
+        <hr> <!-- Línea que separa la cabecera del resto de la página -->
     </header>
 
-    <main>
-        {% block content %}
+    <!-- NUEVO CONTENEDOR FLEX PARA EL MENÚ Y EL CONTENIDO -->
+    <div class="disposicion-principal">
+        
+        <!-- EL MENÚ LATERAL -->
+        {% block menu_lateral %}
+        <aside class="menu-lateral">
+            <nav>
+                <ul>
+                    <li><a href="{% url 'ganaderia:inicio' %}">🏠 Panel de Inicio</a></li>
+                    <li><a href="{% url 'ganaderia:lista_vacas' %}">🐄 Censo de Vacas</a></li>
+                    <li><a href="{% url 'ganaderia:lista_inseminaciones' %}">💉 Inseminaciones</a></li>
+                    <li><a href="{% url 'ganaderia:lista_estimaciones' %}">📅 Calendario</a></li>
+                    <li><a href="{% url 'ganaderia:lista_partos' %}">🍼 Historial de Partos</a></li>
+                </ul>
+            </nav>
+        </aside>
         {% endblock %}
-    </main>
+
+        <!-- EL CONTENIDO CENTRAL -->
+        <main class="contenido-central">
+            <!-- Zona de Mensajes del Sistema -->
+            {% if messages %}
+                <ul>
+                    {% for message in messages %}
+                        <li><strong>{{ message }}</strong></li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+
+            <!-- Espacio donde se inyecta el contenido dinámico -->
+            {% block content %}
+            {% endblock %}
+        </main>
+
+    </div>
+
+    <!-- PIE DE PÁGINA (FOOTER) -->
+    <footer>
+        <div class="footer-contenido">
+            <!-- Izquierda: Marca -->
+            <div class="footer-marca">
+                <p><strong>Crotalia</strong> - Gestión Ganadera</p>
+            </div>
+            
+            <!-- Centro: Contacto -->
+            <div class="footer-contacto">
+                <p>
+                    Soporte Técnico: 
+                    📞 <a href="tel:+34689713312">+34 689713312</a> | 
+                    ✉️ <a href="mailto:crotalia@gmail.com">crotalia@gmail.com</a>
+                </p>
+            </div>
+            
+            <!-- Derecha: Copyright -->
+            <div class="footer-legal">
+                <p><small>&copy; 2026 Todos los derechos reservados.</small></p>
+            </div>
+        </div>
+    </footer>
 
 </body>
-</html>
+</html> 

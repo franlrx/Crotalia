@@ -1,0 +1,22 @@
+{% extends 'ganaderia/base.html' %}
+
+{% block content %}
+
+    <div class="contenedor-formulario">
+        <h2 class="titulo-panel">Añadir Nueva Vaca</h2>
+        <p class="subtitulo-panel">Introduce los datos del animal para añadirlo al censo.</p>
+        
+        <form method="POST" class="formulario-estilizado">
+            {% csrf_token %}
+            
+            <!-- Django pinta aquí todos los campos automáticamente -->
+            {{ form.as_p }}
+            
+            <div class="acciones-formulario">
+                <a href="{% url 'ganaderia:lista_vacas' %}" class="btn-accion btn-cancelar">Cancelar</a>
+                <button type="submit" class="btn-accion btn-añadir">Guardar Vaca</button>
+            </div>
+        </form>
+    </div>
+
+{% endblock %}

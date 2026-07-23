@@ -22,4 +22,7 @@ urlpatterns = [
 
     # Ruta para la página de búsqueda de vacas (Ej: 127.0.0.1:8000/buscar/)
     path('buscar/', views.buscar_vaca, name='buscar_vaca'),
+
+    path('vacas/crear/', views.crear_vaca, name='crear_vaca'),
+    path('vacas/eliminar/<int:vaca_id>/', views.eliminar_vaca, name='eliminar_vaca')
 ]

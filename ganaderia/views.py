@@ -2,6 +2,8 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from .models import Vaca, Parto, Inseminacion
 from itertools import zip_longest
+from django.shortcuts import render, redirect, get_object_or_404
+from .forms import VacaForm
 
 # ==========================================
 # PANTALLA PRINCIPAL Y BUSCADOR
@@ -90,3 +92,28 @@ def lista_estimaciones(request):
     estimaciones_agrupadas = [datos_por_mes[k] for k in claves_ordenadas]
 
     return render(request, 'ganaderia/lista_estimaciones.html', {'estimaciones_agrupadas': estimaciones_agrupadas})
+
+# VISTA PARA CREAR VACA (Por ahora solo cargará la pantalla)
+def crear_vaca(request):
+    if request.method == 'POST':
+        form = VacaForm(request.POST)
+        if form.is_valid():
+            vaca = form.save(commit=False)
+            vaca.granja = request.user.perfil.granja
+            vaca.save()
+            return redirect('ganaderia:lista_vacas')
+    else:
+        form = VacaForm()
+        form.fields['madre'].queryset = Vaca.objects.filter(granja=request.user.perfil.granja)
+
+    # ¡ESTA ES LA LÍNEA CLAVE QUE TE FALTABA! El diccionario {'form': form} es el que envía los datos al HTML
+    return render(request, 'ganaderia/crear_vaca.html', {'form': form})
+
+# VISTA PARA ELIMINAR VACA
+def eliminar_vaca(request, vaca_id):
+    # Por seguridad, solo borramos si la petición llega por POST (al hacer clic en el botón)
+    if request.method == 'POST':
+        vaca = get_object_or_404(Vaca, id=vaca_id)
+        vaca.delete()
+    # Después de borrar, redirigimos automáticamente a la lista
+    return redirect('ganaderia:lista_vacas')

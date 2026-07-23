@@ -1,0 +1,424 @@
+/* 1. RESET Y ESTILOS GENERALES */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background-color: #f4f7f6; /* Un gris muy claro y limpio de fondo */
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Para que el footer se quede siempre abajo */
+}
+
+/* 2. CABECERA Y NAVEGACIÓN */
+header {
+    background-color: #ffffff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 15px 40px;
+    margin-bottom: 40px;
+}
+
+header table {
+    width: 100%;
+    border: none;
+}
+
+header input[type="text"] {
+    padding: 10px 15px;
+    border: 1px solid #ccd1d9;
+    border-radius: 6px;
+    font-size: 15px;
+    width: 250px;
+    transition: border-color 0.3s;
+}
+
+header input[type="text"]:focus {
+    border-color: #2c3e50;
+    outline: none;
+}
+
+/* Botones Generales */
+button {
+    background-color: #2c3e50;
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 15px;
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+button:hover {
+    background-color: #1a252f;
+    transform: translateY(-1px);
+}
+
+/* ========================================= */
+/* 3. ESTRUCTURA PRINCIPAL Y MENÚ LATERAL    */
+/* ========================================= */
+
+.disposicion-principal {
+    display: flex;               /* Coloca el menú y el contenido lado a lado */
+    flex: 1;                     /* Empuja el footer hacia abajo */
+    width: 100%;
+    max-width: 1200px;           /* Ancho máximo de la aplicación */
+    margin: 0 auto;
+    padding: 0 20px;
+    gap: 30px;                   /* Separación de 30px entre el menú y la tabla */
+}
+
+/* --- CAJA DEL MENÚ LATERAL --- */
+/* --- CAJA DEL MENÚ LATERAL --- */
+/* --- CAJA DEL MENÚ LATERAL --- */
+.menu-lateral {
+    width: 250px;
+    background-color: #ffffff;
+    border: 1px solid #e1e5eb;
+    border-radius: 12px;
+    padding: 10px 0;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.04);
+    
+    /* MAGIA PARA DEJARLO FIJO A LO LARGO DE LA PANTALLA */
+    position: sticky;
+    top: 20px;
+    align-self: flex-start;      /* CLAVE: Obligatorio en Flexbox para que funcione el sticky */
+    height: calc(100vh - 180px); /* Descontamos aprox. los 160px de la cabecera para no generar scroll */
+    overflow-y: auto;
+}
+
+/* Opcional: Para ocultar la barra de scroll estética dentro del menú si alguna vez sale */
+.menu-lateral::-webkit-scrollbar {
+    width: 0px;
+    background: transparent; 
+}
+
+.menu-lateral nav ul {
+    list-style: none;            /* Quitamos los puntos negros de la lista */
+    margin: 0;
+    padding: 0;
+}
+
+.menu-lateral nav ul li {
+    border-bottom: 1px solid #f4f7f6; /* Línea gris muy suave entre opciones */
+}
+
+.menu-lateral nav ul li:last-child {
+    border-bottom: none;         /* La última opción no necesita línea debajo */
+}
+
+/* --- BOTONES DEL MENÚ --- */
+.menu-lateral nav ul li a {
+    display: block;              /* Hace que toda la fila sea clickeable, no solo el texto */
+    padding: 15px 20px;
+    color: #555;                 /* Gris oscuro para el texto inactivo */
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 15px;
+    transition: all 0.2s ease;   /* Animación suave para el hover */
+}
+
+/* Efecto al pasar el ratón */
+.menu-lateral nav ul li a:hover {
+    background-color: #f8faf9;   /* Fondo ligeramente gris al hacer hover */
+    color: #2980b9;              /* El texto se vuelve azul corporativo */
+    padding-left: 26px;          /* Desplaza el texto 6px a la derecha dando un efecto dinámico */
+}
+
+/* --- ZONA DEL CONTENIDO (TABLAS, FORMULARIOS) --- */
+.contenido-central {
+    flex: 1;                     /* Ocupa automáticamente todo el espacio libre a la derecha */
+    min-width: 0;                /* Truco vital: Evita que una tabla ancha rompa el diseño Flexbox */
+}
+
+.contenido-central > h2 {
+    color: #2c3e50;
+    text-align: left;            /* Alineado a la izquierda para cuadrar visualmente con las tablas */
+    margin-bottom: 20px;
+    font-size: 28px;
+}
+/* 5. PIE DE PÁGINA */
+footer {
+    background-color: #2c3e50;
+    color: #ecf0f1;
+    padding: 20px 40px;
+    margin-top: auto;     
+    font-size: 15px;
+    width: 100%;          
+}
+
+/* Usamos Flexbox para repartir los 3 bloques en una sola fila */
+.footer-contenido {
+    display: flex;
+    justify-content: space-between; /* Empuja un div a la izq, otro al centro y otro a la der */
+    align-items: center;            /* Centra los textos verticalmente */
+    max-width: 100%;              /* Para que el ancho coincida con el contenido de arriba */
+    margin: 0 auto;                 /* Lo centra en la pantalla */
+}
+
+/* Quitamos el margen inferior de los párrafos para que la altura sea perfecta */
+.footer-contenido p {
+    margin: 0;
+}
+
+footer a {
+    color: #64b5f6;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
+
+footer small {
+    color: #95a5a6;
+}
+/* --- ESTILOS EXCLUSIVOS DEL PANEL DE INICIO --- */
+
+.titulo-panel {
+    text-align: center;
+    color: #2c3e50;
+    margin-bottom: 10px;
+    font-size: 28px;
+}
+
+.subtitulo-panel {
+    text-align: center;
+    color: #666;
+    margin-bottom: 40px;
+    font-size: 16px;
+}
+
+/* Contenedor Flexbox: Fila centrada */
+.menu-fila {
+    display: flex;
+    flex-direction: row;         /* Pone los elementos en una fila horizontal */
+    justify-content: center;     /* Centra la fila entera en el medio de la pantalla */
+    align-items: stretch;        /* Hace que todas las tarjetas tengan la misma altura */
+    gap: 25px;                   /* Separación exacta entre cada tarjeta */
+    flex-wrap: wrap;             /* Permite que bajen de línea si la pantalla del ordenador es muy pequeña */
+}
+
+/* Diseño de cada tarjeta clicleable */
+.tarjeta-menu {
+    display: block;              /* Fundamental: Convierte el enlace en un bloque completo */
+    background-color: #ffffff;
+    border: 1px solid #e1e5eb;
+    border-radius: 12px;
+    padding: 30px 20px;
+    width: 240px;                /* Ancho fijo para que las 4 quepan bien en pantalla */
+    text-align: center;
+    text-decoration: none;       /* Quita el subrayado típico de los enlaces azules */
+    color: #333;                 /* Color general del texto */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.04);
+    transition: all 0.3s ease;
+}
+
+/* Efecto al pasar el ratón por encima de CUALQUIER parte de la tarjeta */
+.tarjeta-menu:hover {
+    transform: translateY(-5px); /* Se levanta un poquito */
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+    border-color: #2980b9;
+}
+
+/* Estilos de los textos dentro de la tarjeta */
+.tarjeta-menu h3 {
+    color: #2980b9;
+    font-size: 20px;
+    margin-bottom: 15px;
+}
+
+.tarjeta-menu:hover h3 {
+    color: #1c5980;              /* El título se oscurece al hacer hover en la tarjeta */
+}
+
+.tarjeta-menu p {
+    color: #555;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+/* ========================================= */
+/* 6. TABLAS Y LISTADOS DE DATOS             */
+/* ========================================= */
+
+/* El contenedor usa Flexbox. 'space-between' empuja el título a la izquierda y el botón a la derecha */
+.encabezado-lista {
+    display: flex;
+    justify-content: space-between; 
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+/* 1. Contenedor general: Aquí ordenamos que todo el texto se alinee al centro */
+.tabla-datos {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;       /* Cambiamos 'left' por 'center' */
+    background-color: transparent;
+}
+
+/* 2. Celdas: Reducimos el relleno al extremo para compactar las filas */
+.tabla-datos th:not(.celda-invisible),
+.tabla-datos td:not(.celda-invisible) {
+    border: 1px solid #cccccc;
+    padding: 5px 8px;         /* Solo 5px de alto y 8px a los lados */
+    line-height: 1.2;         /* Reducimos el interlineado invisible que añade el navegador */
+    color: #333;
+    background-color: #ffffff;
+    border-radius: 0;
+    vertical-align: middle;
+}
+
+.tabla-datos th.celda-invisible,
+.tabla-datos td.celda-invisible {
+    border: none;
+    background-color: transparent;
+    box-shadow: none; 
+    text-align: left;
+}
+
+/* 3. Mantenemos el fondo gris de la cabecera */
+.tabla-datos th:not(.celda-invisible) {
+    background-color: #f4f7f6;
+    font-weight: bold;
+    border-bottom: 2px solid #bdc3c7;
+}
+
+/* Estilos de los botones */
+.btn-accion {
+    padding: 8px 16px;
+    border-radius: 4px;
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+    font-size: 14px;
+}
+
+/* Botón Añadir */
+.btn-añadir {
+    background-color: #2c3e50;
+    color: white;
+    font-weight: bold;
+}
+
+.btn-añadir:hover {
+    background-color: #1a252f;
+}
+
+/* Botón Eliminar: Fondo rojo vivo */
+.btn-eliminar {
+    background-color: #ff3b30; /* Rojo intenso */
+    color: white;
+    font-weight: bold;
+    padding: 3px 8px;
+    font-size: 12px;
+}
+
+.btn-eliminar:hover {
+    background-color: #cc2e26; /* Rojo más oscuro al pasar el ratón */
+}
+
+/* Para centrar los botones dentro de la celda de acciones */
+.celda-acciones form {
+    margin: 0;
+    text-align: center; 
+}
+
+.texto-vacio {
+    text-align: center;
+    padding: 30px !important;
+    color: #7f8c8d;
+    font-style: italic;
+}
+
+
+
+/* 4. La columna de los botones queda completamente libre de fondos y sombras */
+.tabla-datos th.celda-invisible,
+.tabla-datos td.celda-invisible {
+    border: none;
+    background-color: transparent;
+    padding-left: 8px;
+    box-shadow: none; 
+}
+
+/* Eliminamos el margen automático del formulario que estira la fila a lo alto */
+.tabla-datos td.celda-invisible form {
+    margin: 0;
+    padding: 0;
+}
+
+/* ========================================= */
+/* 7. FORMULARIOS                            */
+/* ========================================= */
+
+.contenedor-formulario {
+    max-width: 600px;
+    margin: 0 auto; /* Lo centra en la pantalla */
+    background-color: #ffffff;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.04);
+}
+
+.formulario-estilizado p {
+    margin-bottom: 20px;
+}
+
+.formulario-estilizado label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: #2c3e50;
+}
+
+.formulario-estilizado input,
+.formulario-estilizado select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccd1d9;
+    border-radius: 6px;
+    font-size: 15px;
+    transition: border-color 0.3s;
+}
+
+.formulario-estilizado input:focus,
+.formulario-estilizado select:focus {
+    border-color: #2980b9;
+    outline: none;
+}
+
+.acciones-formulario {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+    border-top: 1px solid #e1e5eb;
+    padding-top: 20px;
+}
+
+.btn-cancelar {
+    background-color: #95a5a6;
+    color: #ffffff !important;      /* Forzamos el texto blanco ignorando que sea un enlace */
+    text-decoration: none !important; /* Quitamos el subrayado definitivamente */
+    padding: 10px 20px;             /* Le damos la misma altura y anchura que al otro botón */
+    border-radius: 6px;             /* Suavizamos las esquinas */
+    font-weight: bold;
+    font-size: 15px;
+    display: flex;                  /* Usamos flex para centrar el texto perfectamente */
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+.btn-cancelar:hover {
+    background-color: #7f8c8d;
+    color: #ffffff;
+    transform: translateY(-1px);
+}
