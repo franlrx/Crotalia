@@ -1,0 +1,41 @@
+{% extends 'ganaderia/base.html' %}
+
+{% block content %}
+<div class="contenedor-formulario">
+    <h2 class="titulo-formulario">+ Registrar Nuevo Parto</h2>
+    
+    <form method="POST" class="formulario-estilizado">
+        {% csrf_token %}
+        
+        <p>
+            <label for="{{ form.fecha_real.id_for_label }}">Fecha del Parto:</label>
+            {{ form.fecha_real }}
+        </p>
+        
+        <p>
+            <label for="{{ form.madre.id_for_label }}">Madre (Nº Casa):</label>
+            {{ form.madre }}
+        </p>
+
+        <p>
+            <label for="{{ form.nombre_padre.id_for_label }}">Nombre del Padre (Opcional):</label>
+            {{ form.nombre_padre }}
+        </p>
+
+        <p>
+            <label for="{{ form.genero_cria.id_for_label }}">Género de la Cría:</label>
+            {{ form.genero_cria }}
+        </p>
+
+        <p>
+            <label for="{{ form.numero_casa_cria.id_for_label }}">Nº Casa de la Cría (Dejar vacío si es macho):</label>
+            {{ form.numero_casa_cria }}
+        </p>
+
+        <div class="acciones-formulario">
+            <a href="{% url 'ganaderia:lista_partos' %}" class="btn-cancelar">Cancelar</a>
+            <button type="submit" class="btn-accion btn-añadir">Guardar Parto</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

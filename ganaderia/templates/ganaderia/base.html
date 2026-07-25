@@ -29,11 +29,16 @@
                 </td>
 
                 <!-- Zona Derecha: Botón de Cerrar Sesión -->
+                <!-- Zona Derecha: Botones de Cuenta y Sesión -->
                 <td align="right">
-                    <form action="{% url 'admin:logout' %}?next=/" method="POST">
-                        {% csrf_token %}
-                        <button type="submit">Cerrar Sesión</button>
-                    </form>
+                    <div class="contenedor-botones-sesion">
+                        <a href="{% url 'ganaderia:cambiar_password' %}" class="btn-sesion">Cambiar Contraseña</a>
+                        
+                        <form action="{% url 'admin:logout' %}?next=/" method="POST">
+                            {% csrf_token %}
+                            <button type="submit" class="btn-sesion">Cerrar Sesión</button>
+                        </form>
+                    </div>
                 </td>
             </tr>
         </table>

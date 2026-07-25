@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from .models import Vaca, Parto, Inseminacion
 from itertools import zip_longest
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import VacaForm, InseminacionForm
+from .forms import VacaForm, InseminacionForm, PartoForm
 from datetime import date, timedelta
 
 # ==========================================
@@ -141,6 +141,27 @@ def crear_vaca(request):
     # ¡ESTA ES LA LÍNEA CLAVE QUE TE FALTABA! El diccionario {'form': form} es el que envía los datos al HTML
     return render(request, 'ganaderia/crear_vaca.html', {'form': form})
 
+@login_required(login_url='/admin/login/')
+def editar_vaca(request, vaca_id):
+    # Recuperamos la vaca asegurándonos de que pertenece a la granja del usuario
+    vaca = get_object_or_404(Vaca, id=vaca_id, granja=request.user.perfil.granja)
+    
+    if request.method == 'POST':
+        # Le pasamos el 'instance=vaca' para que Django sepa que estamos actualizando, no creando
+        form = VacaForm(request.POST, instance=vaca)
+        if form.is_valid():
+            form.save()
+            return redirect('ganaderia:lista_vacas')
+    else:
+        # Cargamos el formulario con los datos actuales de la vaca
+        form = VacaForm(instance=vaca)
+        
+        # Filtramos las posibles madres: Solo vacas de esta granja y EXCLUIMOS a la propia vaca 
+        # para que no puedas poner por error que una vaca es madre de sí misma
+        form.fields['madre'].queryset = Vaca.objects.filter(granja=request.user.perfil.granja).exclude(id=vaca.id)
+
+    return render(request, 'ganaderia/editar_vaca.html', {'form': form, 'vaca': vaca})
+
 # VISTA PARA ELIMINAR VACA
 def eliminar_vaca(request, vaca_id):
     # Por seguridad, solo borramos si la petición llega por POST (al hacer clic en el botón)
@@ -187,3 +208,36 @@ def actualizar_estado_inseminacion(request, inseminacion_id, nuevo_estado):
             inseminacion.save() 
             
     return redirect('ganaderia:lista_inseminaciones')
+
+@login_required(login_url='/admin/login/')
+def crear_parto(request):
+    if request.method == 'POST':
+        form = PartoForm(request.POST)
+        if form.is_valid():
+            # El método save() del modelo Parto ya se encarga de crear la cría en el censo
+            # si es hembra, por lo que aquí solo necesitamos guardarlo de forma normal.
+            parto = form.save(commit=False)
+            parto.save()
+            return redirect('ganaderia:lista_partos')
+    else:
+        form = PartoForm()
+        # Filtramos para que en el desplegable de madres solo salgan las vacas de tu granja
+        form.fields['madre'].queryset = Vaca.objects.filter(granja=request.user.perfil.granja)
+
+    return render(request, 'ganaderia/crear_parto.html', {'form': form})
+
+@login_required(login_url='/admin/login/')
+def buscar_vaca(request):
+    granja_usuario = request.user.perfil.granja
+    query = request.GET.get('q', '') 
+    
+    if query:
+        # Cambiamos '__icontains' por '__iexact' para forzar la coincidencia exacta
+        resultados = Vaca.objects.filter(
+            granja=granja_usuario, 
+            numero_casa__iexact=query
+        ).prefetch_related('inseminaciones', 'partos').order_by('numero_casa')
+    else:
+        resultados = None
+
+    return render(request, 'ganaderia/resultados_busqueda.html', {'vacas': resultados, 'query': query})

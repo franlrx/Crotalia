@@ -1,0 +1,41 @@
+{% extends 'ganaderia/base.html' %}
+
+{% block content %}
+<div class="contenedor-formulario">
+    <h2 class="titulo-formulario">✎ Editar Datos de la Vaca Nº {{ vaca.numero_casa }}</h2>
+    
+    <form method="POST" class="formulario-estilizado">
+        {% csrf_token %}
+        
+        <p>
+            <label for="{{ form.numero_casa.id_for_label }}">Nº Casa:</label>
+            {{ form.numero_casa }}
+        </p>
+        
+        <p>
+            <label for="{{ form.crotal.id_for_label }}">Crotal Oficial:</label>
+            {{ form.crotal }}
+        </p>
+
+        <p>
+            <label for="{{ form.nombre_padre.id_for_label }}">Nombre del Padre:</label>
+            {{ form.nombre_padre }}
+        </p>
+
+        <p>
+            <label for="{{ form.madre.id_for_label }}">Madre:</label>
+            {{ form.madre }}
+        </p>
+
+        <p>
+            <label for="{{ form.fecha_nacimiento.id_for_label }}">Fecha de Nacimiento:</label>
+            {{ form.fecha_nacimiento }}
+        </p>
+
+        <div class="acciones-formulario">
+            <a href="{% url 'ganaderia:lista_vacas' %}" class="btn-cancelar">Cancelar</a>
+            <button type="submit" class="btn-accion btn-añadir">Guardar Cambios</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

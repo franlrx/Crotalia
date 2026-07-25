@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from django.contrib.auth import views as auth_views
 
 # Definimos el nombre de la aplicación para organizar bien las rutas internamente
 app_name = 'ganaderia'
@@ -24,9 +25,23 @@ urlpatterns = [
     path('buscar/', views.buscar_vaca, name='buscar_vaca'),
 
     path('vacas/crear/', views.crear_vaca, name='crear_vaca'),
+    path('vacas/editar/<int:vaca_id>/', views.editar_vaca, name='editar_vaca'),
     path('vacas/eliminar/<int:vaca_id>/', views.eliminar_vaca, name='eliminar_vaca'),
 
     # Rutas para crear y actualizar inseminaciones
     path('inseminaciones/crear/', views.crear_inseminacion, name='crear_inseminacion'),
     path('inseminaciones/estado/<int:inseminacion_id>/<str:nuevo_estado>/', views.actualizar_estado_inseminacion, name='actualizar_estado_inseminacion'),
+
+    # Ruta para crear un nuevo parto
+    path('partos/crear/', views.crear_parto, name='crear_parto'),
+
+    # Rutas para el cambio de contraseña
+    path('perfil/cambiar-password/', auth_views.PasswordChangeView.as_view(
+        template_name='ganaderia/cambiar_password.html',
+        success_url='/perfil/cambiar-password/hecho/'
+    ), name='cambiar_password'),
+    
+    path('perfil/cambiar-password/hecho/', auth_views.PasswordChangeDoneView.as_view(
+        template_name='ganaderia/cambiar_password_hecho.html'
+    ), name='cambiar_password_hecho'),
 ]

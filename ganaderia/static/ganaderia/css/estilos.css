@@ -345,6 +345,26 @@ footer small {
     background-color: #cc2e26; /* Rojo más oscuro al pasar el ratón */
 }
 
+/* Botón Editar: Color de advertencia/edición */
+.btn-editar {
+    background-color: #f39c12; /* Naranja cálido */
+    color: white;
+    font-weight: bold;
+    padding: 3px 8px;
+    font-size: 12px;
+}
+
+.btn-editar:hover {
+    background-color: #d68910; /* Naranja más oscuro al pasar el ratón */
+}
+
+/* Flexbox para alinear varios botones en la misma celda de acciones */
+.celda-acciones {
+    display: flex;
+    gap: 5px; /* Espacio de 5px entre el botón editar y eliminar */
+    justify-content: flex-end; /* Alinea los botones a la derecha */
+}
+
 /* Para centrar los botones dentro de la celda de acciones */
 .celda-acciones form {
     margin: 0;
@@ -509,4 +529,112 @@ footer small {
 .barra-filtros select:focus {
     border-color: #2980b9;
     outline: none;
+}
+
+/* ========================================= */
+/* 10. FICHA TÉCNICA (RESULTADOS BÚSQUEDA)   */
+/* ========================================= */
+
+.ficha-tecnica {
+    background-color: #ffffff;
+    padding: 25px;
+    border-radius: 12px;
+    border: 1px solid #e1e5eb;
+    margin-bottom: 40px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.04);
+}
+
+.titulo-ficha {
+    color: #2c3e50;
+    border-bottom: 2px solid #2980b9;
+    padding-bottom: 10px;
+    margin-top: 0;        /* Forzamos que no haya hueco arriba */
+    margin-bottom: 20px;
+}
+
+.subtitulo-ficha {
+    color: #555;
+    margin-top: 25px;     /* Separación con la tabla anterior */
+    margin-bottom: 10px;
+}
+
+.tabla-espaciada {
+    margin-bottom: 30px;
+}
+
+.mensaje-vacio-ficha {
+    color: #7f8c8d;
+    font-style: italic;
+    padding: 10px;
+    background-color: #f4f7f6;
+    border-radius: 6px;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.mensaje-vacio-ficha.sin-margen {
+    margin-bottom: 0;
+}
+
+.contenedor-sin-resultados {
+    text-align: center;
+    margin-top: 40px;
+}
+
+.titulo-error {
+    color: #e74c3c;
+    margin-bottom: 10px;
+}
+
+/* ========================================= */
+/* 11. PANTALLAS DE MENSAJES (ÉXITO/ERROR)   */
+/* ========================================= */
+
+.contenedor-centrado {
+    text-align: center;
+    margin-top: 40px;
+}
+
+.titulo-exito {
+    color: #27ae60;
+}
+
+.texto-destacado {
+    margin-bottom: 30px;
+    font-size: 16px;
+}
+
+/* ========================================= */
+/* 12. BOTONES DE CABECERA Y SESIÓN          */
+/* ========================================= */
+
+.contenedor-botones-sesion {
+    display: flex;
+    gap: 10px;                  /* Espacio entre los dos botones */
+    justify-content: flex-end;  /* Los empuja hacia la derecha */
+    align-items: center;        /* Los centra verticalmente */
+}
+
+.btn-sesion {
+    background-color: #34495e;  /* Color oscuro elegante */
+    color: #ffffff;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;      /* Quita el subrayado del enlace */
+    transition: background-color 0.2s ease;
+    font-family: inherit;       /* Iguala la tipografía */
+}
+
+.btn-sesion:hover {
+    background-color: #2c3e50;  /* Más oscuro al pasar el ratón */
+    color: #ffffff;             /* Asegura que el texto siga blanco */
+}
+
+/* Quita el margen por defecto del formulario para que no rompa la alineación flexbox */
+.contenedor-botones-sesion form {
+    margin: 0;
 }

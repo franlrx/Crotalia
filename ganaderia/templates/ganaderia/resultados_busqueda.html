@@ -1,0 +1,116 @@
+{% extends 'ganaderia/base.html' %}
+
+{% block content %}
+<div class="encabezado-lista">
+    <h2>Resultados de Búsqueda: "{{ query }}"</h2>
+</div>
+
+{% if vacas %}
+    {% for vaca in vacas %}
+    <!-- CONTENEDOR TIPO FICHA TÉCNICA -->
+    <div class="ficha-tecnica">
+
+        <h3 class="titulo-ficha">
+            🐮 Ficha de Vaca - Nº Casa: {{ vaca.numero_casa }}
+        </h3>
+
+        <!-- ============================== -->
+        <!-- 1. DATOS GENERALES             -->
+        <!-- ============================== -->
+        <h4 class="subtitulo-ficha">📋 Datos Generales</h4>
+        <table class="tabla-datos tabla-espaciada">
+            <thead>
+                <tr>
+                    <th>Crotal Oficial</th>
+                    <th>Padre</th>
+                    <th>Madre</th>
+                    <th>Fecha Nacimiento</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{ vaca.crotal }}</td>
+                    <td>{{ vaca.nombre_padre|default:"-" }}</td>
+                    <td>{% if vaca.madre %}Nº {{ vaca.madre.numero_casa }}{% else %}Desconocida{% endif %}</td>
+                    <td>{{ vaca.fecha_nacimiento|date:"d/m/Y" }}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- ============================== -->
+        <!-- 2. HISTORIAL DE INSEMINACIONES -->
+        <!-- ============================== -->
+        <h4 class="subtitulo-ficha">💉 Historial de Inseminaciones</h4>
+        {% if vaca.inseminaciones.all %}
+            <table class="tabla-datos tabla-espaciada">
+                <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Toro</th>
+                        <th>Estado</th>
+                        <th>Estimación Secado</th>
+                        <th>Estimación Parto</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- dictsortreversed ordena automáticamente para mostrar la más reciente primero -->
+                    {% for ins in vaca.inseminaciones.all|dictsortreversed:"fecha" %}
+                    <tr>
+                        <td>{{ ins.fecha|date:"d/m/Y" }}</td>
+                        <td>{{ ins.toro }}</td>
+                        <td><strong>{{ ins.estado }}</strong></td>
+                        <td>{{ ins.estimacion_secado|date:"d/m/Y"|default:"-" }}</td>
+                        <td>{{ ins.estimacion_parto|date:"d/m/Y"|default:"-" }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p class="mensaje-vacio-ficha">
+                No hay inseminaciones registradas en el historial de esta vaca.
+            </p>
+        {% endif %}
+
+        <!-- ============================== -->
+        <!-- 3. HISTORIAL DE PARTOS         -->
+        <!-- ============================== -->
+        <h4 class="subtitulo-ficha">🍼 Historial de Partos</h4>
+        {% if vaca.partos.all %}
+            <table class="tabla-datos">
+                <thead>
+                    <tr>
+                        <th>Fecha de Parto</th>
+                        <th>Padre de la cría</th>
+                        <th>Género</th>
+                        <th>Nº Casa de la Cría</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for parto in vaca.partos.all|dictsortreversed:"fecha_real" %}
+                    <tr>
+                        <td>{{ parto.fecha_real|date:"d/m/Y" }}</td>
+                        <td>{{ parto.nombre_padre|default:"-" }}</td>
+                        <td><strong>{{ parto.genero_cria }}</strong></td>
+                        <td>{% if parto.genero_cria == 'HEMBRA' and parto.numero_casa_cria %}Nº {{ parto.numero_casa_cria }}{% else %}-{% endif %}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p class="mensaje-vacio-ficha sin-margen">
+                No hay partos registrados en el historial de esta vaca.
+            </p>
+        {% endif %}
+
+    </div>
+    {% endfor %}
+
+{% else %}
+    <!-- MENSAJE SI NO HAY RESULTADOS -->
+    <div class="contenedor-formulario contenedor-sin-resultados">
+        <h3 class="titulo-error">No se encontraron resultados</h3>
+        <p>No existe ninguna vaca con el número <strong>"{{ query }}"</strong> en el censo de esta granja.</p>
+    </div>
+{% endif %}
+
+{% endblock %}

@@ -32,11 +32,18 @@
                     <td>{{ vaca.fecha_nacimiento|date:"d/m/Y" }}</td>
                     
                     <!-- La celda sigue aquí, pero el CSS le quitará el borde -->
+                    <!-- Columna de acciones (Asegúrate de tener un <th> invisible en el thead para esta columna) -->
                     <td class="celda-invisible">
-                        <form action="{% url 'ganaderia:eliminar_vaca' vaca.id %}" method="POST" onsubmit="return confirm('¿Estás seguro de que deseas eliminar la vaca {{ vaca.numero_casa }} del censo?');">
-                            {% csrf_token %}
-                            <button type="submit" class="btn-accion btn-eliminar">Eliminar</button>
-                        </form>
+                        <div class="celda-acciones">
+                            <!-- Botón Editar (Es un simple enlace) -->
+                            <a href="{% url 'ganaderia:editar_vaca' vaca.id %}" class="btn-accion btn-editar">Editar</a>
+                            
+                            <!-- Botón Eliminar (Se mantiene como un formulario por seguridad) -->
+                            <form action="{% url 'ganaderia:eliminar_vaca' vaca.id %}" method="POST" style="margin: 0;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn-accion btn-eliminar">Eliminar</button>
+                            </form>
+                        </div>
                     </td>
                 </tr>
                 {% empty %}

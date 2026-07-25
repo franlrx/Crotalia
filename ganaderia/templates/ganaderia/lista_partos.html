@@ -1,35 +1,42 @@
 {% extends 'ganaderia/base.html' %}
 
 {% block content %}
-    <h2>Historial de Partos</h2>
+    <div class="encabezado-lista">
+        <h2>Registro de Partos - {{ nombre_granja }}</h2>
+        <a href="{% url 'ganaderia:crear_parto' %}" class="btn-accion btn-añadir">+ Registrar Parto</a>
+    </div>
 
-    <table border="1">
+    <table class="tabla-datos">
         <thead>
             <tr>
-                <th>Fecha del Parto</th>
+                <th>Fecha de Parto</th>
                 <th>Madre (Nº Casa)</th>
                 <th>Padre</th>
-                <th>Género de la Cría</th>
+                <th>Género Cría</th>
                 <th>Nº Casa Cría</th>
             </tr>
         </thead>
         <tbody>
             {% for parto in partos %}
             <tr>
-                <td>{{ parto.fecha_real }}</td>
+                <td>{{ parto.fecha_real|date:"d/m/Y" }}</td>
                 <td>{{ parto.madre.numero_casa }}</td>
-                <td>{{ parto.nombre_padre|default:"Desconocido" }}</td>
-                <td>{{ parto.genero_cria }}</td>
-                <td>{{ parto.numero_casa_cria|default:"-" }}</td>
+                <!-- default:"-" pone una rayita si el campo del padre está vacío -->
+                <td>{{ parto.nombre_padre|default:"-" }}</td>
+                <td><strong>{{ parto.genero_cria }}</strong></td>
+                <td>
+                    {% if parto.genero_cria == 'HEMBRA' and parto.numero_casa_cria %}
+                        Nº {{ parto.numero_casa_cria }}
+                    {% else %}
+                        -
+                    {% endif %}
+                </td>
             </tr>
             {% empty %}
             <tr>
-                <td colspan="5">No hay partos registrados en esta granja.</td>
+                <td colspan="5" class="texto-vacio">No hay registros de partos en esta granja.</td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
-
-    <br>
-    <a href="{% url 'ganaderia:inicio' %}">Volver al menú principal</a>
 {% endblock %}
