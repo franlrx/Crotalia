@@ -5,47 +5,46 @@
     <meta charset="UTF-8">
     <title>Crotalia - Gestión Ganadera</title>
     <link rel="stylesheet" href="{% static 'ganaderia/css/estilos.css' %}">
+    <link rel="icon" href="{% static 'ganaderia/images/favicon.png' %}" type="image/png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
 
     <!-- CABECERA PRINCIPAL -->
     <header>
-        <table width="100%">
-            <tr>
-                <!-- Zona Izquierda: Logo imagen estática -->
-                <td align="left">
-                    <a href="{% url 'ganaderia:inicio' %}">
-                        <img src="{% static 'ganaderia/images/logo_crotalia.png' %}" alt="Logo Crotalia" height="90">
-                    </a>
-                </td>
-                
-                <!-- Zona Centro: Buscador -->
-                <td align="center">
-                    <form action="{% url 'ganaderia:buscar_vaca' %}" method="GET">
-                        <label for="input_buscar"><strong>Buscar Vaca:</strong></label>
-                        <input type="text" id="input_buscar" name="q" placeholder="Nº de Casa (Ej: 12B)" required>
-                        <button type="submit">Buscar</button>
-                    </form>
-                </td>
+        <div class="cabecera-contenedor">
+            <!-- Zona Izquierda: Logo y botón hamburguesa -->
+            <div class="zona-logo">
+                <button id="btn-menu-movil" class="btn-hamburguesa">☰</button>
+                <a href="{% url 'ganaderia:inicio' %}">
+                    <img src="{% static 'ganaderia/images/logo_crotalia.png' %}" alt="Logo Crotalia" height="90">
+                </a>
+            </div>
+            
+            <!-- Zona Centro: Buscador -->
+            <div class="zona-buscador">
+                <form action="{% url 'ganaderia:buscar_vaca' %}" method="GET">
+                    <label for="input_buscar"><strong>Buscar Vaca:</strong></label>
+                    <input type="text" id="input_buscar" name="q" placeholder="Nº de Casa (Ej: 12B)" required>
+                    <button type="submit">Buscar</button>
+                </form>
+            </div>
 
-                <!-- Zona Derecha: Botón de Cerrar Sesión -->
-                <!-- Zona Derecha: Botones de Cuenta y Sesión -->
-                <td align="right">
-                    <div class="contenedor-botones-sesion">
-                        <a href="{% url 'ganaderia:cambiar_password' %}" class="btn-sesion">Cambiar Contraseña</a>
-                        
-                        <form action="{% url 'admin:logout' %}?next=/" method="POST">
-                            {% csrf_token %}
-                            <button type="submit" class="btn-sesion">Cerrar Sesión</button>
-                        </form>
-                    </div>
-                </td>
-            </tr>
-        </table>
-        <hr> <!-- Línea que separa la cabecera del resto de la página -->
+            <!-- Zona Derecha: Botones de Cuenta y Sesión -->
+            <div class="zona-acciones">
+                <div class="contenedor-botones-sesion">
+                    <a href="{% url 'ganaderia:cambiar_password' %}" class="btn-sesion">Cambiar Contraseña</a>
+                    
+                    <form action="{% url 'admin:logout' %}?next=/" method="POST">
+                        {% csrf_token %}
+                        <button type="submit" class="btn-sesion">Cerrar Sesión</button>
+                    </form>
+                </div>
+            </div>
+        </div>
     </header>
 
-    <!-- NUEVO CONTENEDOR FLEX PARA EL MENÚ Y EL CONTENIDO -->
+    <!-- CONTENEDOR FLEX PARA EL MENÚ Y EL CONTENIDO -->
     <div class="disposicion-principal">
         
         <!-- EL MENÚ LATERAL -->
@@ -105,5 +104,11 @@
         </div>
     </footer>
 
+    <!-- SCRIPT PARA EL MENÚ MÓVIL -->
+    <script>
+        document.getElementById('btn-menu-movil').addEventListener('click', function() {
+            document.querySelector('.menu-lateral').classList.toggle('activo');
+        });
+    </script>
 </body>
-</html> 
+</html>

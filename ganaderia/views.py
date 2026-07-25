@@ -71,6 +71,7 @@ def lista_inseminaciones(request):
 def lista_estimaciones(request):
     granja_usuario = request.user.perfil.granja
     estimaciones = Inseminacion.objects.filter(vaca__granja=granja_usuario, estado='POSITIVO')
+    partos_registrados = Parto.objects.filter(madre__granja=granja_usuario)
     
     nombres_meses = {
         1: 'Enero', 2: 'Febrero', 3: 'Marzo', 4: 'Abril', 5: 'Mayo', 6: 'Junio',
@@ -79,30 +80,40 @@ def lista_estimaciones(request):
     
     datos_por_mes = {}
 
-    # 1. Agrupamos los datos por mes y año como hacíamos antes
+    # 1. Agrupamos los datos de Inseminaciones (Secados y Partos)
     for est in estimaciones:
         if est.estimacion_secado:
             clave_mes = (est.estimacion_secado.year, est.estimacion_secado.month)
             if clave_mes not in datos_por_mes:
-                # Añadimos un valor 'value' (Ej: "2026-07") para usarlo en el filtro HTML
-                datos_por_mes[clave_mes] = {'titulo': f"{nombres_meses[clave_mes[1]]} {clave_mes[0]}", 'secados': [], 'partos': [], 'value': f"{clave_mes[0]}-{clave_mes[1]:02d}"}
+                datos_por_mes[clave_mes] = {'titulo': f"{nombres_meses[clave_mes[1]]} {clave_mes[0]}", 'secados': [], 'partos': [], 'destetes': [], 'value': f"{clave_mes[0]}-{clave_mes[1]:02d}"}
             datos_por_mes[clave_mes]['secados'].append(est)
             
         if est.estimacion_parto:
             clave_mes = (est.estimacion_parto.year, est.estimacion_parto.month)
             if clave_mes not in datos_por_mes:
-                datos_por_mes[clave_mes] = {'titulo': f"{nombres_meses[clave_mes[1]]} {clave_mes[0]}", 'secados': [], 'partos': [], 'value': f"{clave_mes[0]}-{clave_mes[1]:02d}"}
+                datos_por_mes[clave_mes] = {'titulo': f"{nombres_meses[clave_mes[1]]} {clave_mes[0]}", 'secados': [], 'partos': [], 'destetes': [], 'value': f"{clave_mes[0]}-{clave_mes[1]:02d}"}
             datos_por_mes[clave_mes]['partos'].append(est)
 
-    # 2. Extraemos la lista de meses disponibles ANTES de aplicar cualquier filtro para el menú desplegable
+    # 2. Agrupamos los datos de Partos Reales (Destetes: Fecha real + 60 días)
+    for parto in partos_registrados:
+        if parto.fecha_real:
+            fecha_destete = parto.fecha_real + timedelta(days=60)
+            clave_mes = (fecha_destete.year, fecha_destete.month)
+            if clave_mes not in datos_por_mes:
+                datos_por_mes[clave_mes] = {'titulo': f"{nombres_meses[clave_mes[1]]} {clave_mes[0]}", 'secados': [], 'partos': [], 'destetes': [], 'value': f"{clave_mes[0]}-{clave_mes[1]:02d}"}
+            
+            # Guardamos la fecha de destete calculada temporalmente en el objeto parto para usarla en el HTML
+            parto.fecha_destete = fecha_destete
+            datos_por_mes[clave_mes]['destetes'].append(parto)
+
+    # 3. Menú desplegable para los filtros
     opciones_meses = [{'value': v['value'], 'titulo': v['titulo']} for k, v in sorted(datos_por_mes.items())]
 
-    # 3. Comprobamos si el usuario ha seleccionado un mes en el filtro
+    # 4. Filtro por mes
     mes_filtro = request.GET.get('mes')
     if mes_filtro:
         try:
             year_f, month_f = map(int, mes_filtro.split('-'))
-            # Si el mes filtrado existe en nuestros datos, nos quedamos solo con ese
             if (year_f, month_f) in datos_por_mes:
                 datos_por_mes = {(year_f, month_f): datos_por_mes[(year_f, month_f)]}
             else:
@@ -110,11 +121,14 @@ def lista_estimaciones(request):
         except ValueError:
             pass
 
-    # 4. Ordenamos internamente los datos del mes (o meses) resultantes
+    # 5. Ordenar las 3 listas internamente y emparejarlas en filas
     for clave in datos_por_mes:
         secados_ordenados = sorted(datos_por_mes[clave]['secados'], key=lambda x: x.estimacion_secado)
         partos_ordenados = sorted(datos_por_mes[clave]['partos'], key=lambda x: x.estimacion_parto)
-        datos_por_mes[clave]['filas'] = list(zip_longest(secados_ordenados, partos_ordenados, fillvalue=None))
+        destetes_ordenados = sorted(datos_por_mes[clave]['destetes'], key=lambda x: x.fecha_destete)
+        
+        # zip_longest ahora alinea las 3 columnas
+        datos_por_mes[clave]['filas'] = list(zip_longest(secados_ordenados, partos_ordenados, destetes_ordenados, fillvalue=None))
 
     claves_ordenadas = sorted(datos_por_mes.keys())
     estimaciones_agrupadas = [datos_por_mes[k] for k in claves_ordenadas]
@@ -241,3 +255,38 @@ def buscar_vaca(request):
         resultados = None
 
     return render(request, 'ganaderia/resultados_busqueda.html', {'vacas': resultados, 'query': query})
+
+@login_required(login_url='/admin/login/')
+def inicio(request):
+    granja_usuario = request.user.perfil.granja
+    
+    # 1. Total de vacas activas en la granja
+    total_vacas = Vaca.objects.filter(granja=granja_usuario).count()
+    
+    # 2. Tasa de éxito de inseminaciones
+    total_inseminaciones = Inseminacion.objects.filter(vaca__granja=granja_usuario).count()
+    inseminaciones_positivas = Inseminacion.objects.filter(vaca__granja=granja_usuario, estado='POSITIVO').count()
+    
+    if total_inseminaciones > 0:
+        # Calculamos el porcentaje y lo redondeamos a 1 decimal
+        tasa_exito = round((inseminaciones_positivas / total_inseminaciones) * 100, 1)
+    else:
+        tasa_exito = 0
+        
+    # 3. Partos esperados para el mes actual
+    hoy = date.today()
+    partos_este_mes = Inseminacion.objects.filter(
+        vaca__granja=granja_usuario,
+        estado='POSITIVO',
+        estimacion_parto__year=hoy.year,
+        estimacion_parto__month=hoy.month
+    ).count()
+
+    contexto = {
+        'nombre_granja': granja_usuario.nombre,
+        'total_vacas': total_vacas,
+        'tasa_exito': tasa_exito,
+        'partos_este_mes': partos_este_mes,
+    }
+    
+    return render(request, 'ganaderia/inicio.html', contexto)

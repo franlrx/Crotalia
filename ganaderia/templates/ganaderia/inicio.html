@@ -1,41 +1,34 @@
 {% extends 'ganaderia/base.html' %}
 
-<!-- AL DEJAR ESTE BLOQUE VACÍO, LE DECIMOS A DJANGO QUE DESTRUYA EL MENÚ SOLO EN ESTA PÁGINA -->
-{% block menu_lateral %}
-{% endblock %}
-
 {% block content %}
+    <div class="encabezado-lista">
+        <h2>Panel de Control - {{ nombre_granja }}</h2>
+    </div>
 
-    <h2 class="titulo-panel">Panel de Control - {{ request.user.perfil.granja.nombre }}</h2>
-    <p class="subtitulo-panel">Selecciona una de las opciones para gestionar los datos:</p>
-
-    <!-- Contenedor principal para colocar las tarjetas en fila -->
-    <div class="menu-fila">
+    <!-- CUADRÍCULA DE ESTADÍSTICAS -->
+    <div class="dashboard-grid">
         
-        <!-- Bloque 1: Vacas (Toda la tarjeta es un enlace) -->
-        <a href="{% url 'ganaderia:lista_vacas' %}" class="tarjeta-menu">
-            <h3>🐄 Lista de Vacas</h3>
-            <p>Consultar el censo total y buscar animales.</p>
-        </a>
-        
-        <!-- Bloque 2: Inseminaciones -->
-        <a href="{% url 'ganaderia:lista_inseminaciones' %}" class="tarjeta-menu">
-            <h3>💉 Inseminaciones</h3>
-            <p>Registro de intentos y confirmación de estados.</p>
-        </a>
+        <!-- Tarjeta 1: Censo Total -->
+        <div class="tarjeta-stat">
+            <div class="tarjeta-stat-icono">🐮</div>
+            <div class="tarjeta-stat-titulo">Censo Activo</div>
+            <div class="tarjeta-stat-valor valor-azul">{{ total_vacas }}</div>
+        </div>
 
-        <!-- Bloque 3: Estimaciones / Calendario -->
-        <a href="{% url 'ganaderia:lista_estimaciones' %}" class="tarjeta-menu">
-            <h3>📅 Calendario</h3>
-            <p>Fechas de secado y previsiones de parto por meses.</p>
-        </a>
-        
-        <!-- Bloque 4: Partos -->
-        <a href="{% url 'ganaderia:lista_partos' %}" class="tarjeta-menu">
-            <h3>🍼 Historial de Partos</h3>
-            <p>Nacimientos registrados y asignación de crías.</p>
-        </a>
+        <!-- Tarjeta 2: Partos del Mes -->
+        <div class="tarjeta-stat">
+            <div class="tarjeta-stat-icono">🍼</div>
+            <div class="tarjeta-stat-titulo">Partos Este Mes</div>
+            <div class="tarjeta-stat-valor valor-naranja">{{ partos_este_mes }}</div>
+        </div>
 
+        <!-- Tarjeta 3: Rendimiento Reproductivo -->
+        <div class="tarjeta-stat">
+            <div class="tarjeta-stat-icono">📈</div>
+            <div class="tarjeta-stat-titulo">Éxito Inseminaciones</div>
+            <div class="tarjeta-stat-valor valor-verde">{{ tasa_exito }}%</div>
+        </div>
+        
     </div>
 
 {% endblock %}

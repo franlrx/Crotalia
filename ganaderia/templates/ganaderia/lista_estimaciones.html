@@ -1,15 +1,14 @@
 {% extends 'ganaderia/base.html' %}
 
 {% block content %}
-    <h2>Calendario de Tareas (Secados y Partos)</h2>
+    <h2>Calendario de Tareas (Secados, Partos y Destetes)</h2>
 
-    <!-- NUEVA BARRA DE FILTROS POR MES -->
+    <!-- BARRA DE FILTROS POR MES -->
     <div class="barra-filtros">
         <form method="GET" action="{% url 'ganaderia:lista_estimaciones' %}">
             <label for="mes">Filtrar por mes:</label>
             <select name="mes" id="mes">
                 <option value="">Mostrar todo el calendario</option>
-                <!-- Generamos las opciones dinámicamente según los meses que tengan tareas -->
                 {% for opcion in opciones_meses %}
                     <option value="{{ opcion.value }}" {% if mes_seleccionado == opcion.value %}selected{% endif %}>
                         {{ opcion.titulo }}
@@ -22,15 +21,17 @@
 
     {% for mes_data in estimaciones_agrupadas %}
         
-        <!-- Título del mes (Ej: Julio 2026) -->
         <h3>{{ mes_data.titulo }}</h3>
         
-        <table border="1" style="margin-bottom: 30px; text-align: center; width: 100%; max-width: 800px;">
+        <!-- Hemos aumentado el max-width a 1000px para que las 3 columnas quepan holgadamente -->
+        <table class="tabla-datos" style="margin-bottom: 30px; text-align: center; width: 100%; max-width: 1000px;">
             <thead>
-                <!-- Cabecera principal dividida -->
+                <!-- Cabecera principal dividida en 3 bloques -->
+                <!-- Cabecera principal dividida en 3 bloques -->
                 <tr>
-                    <th colspan="2" style="background-color: #f2f2f2;">Secado</th>
-                    <th colspan="2" style="background-color: #e6f7ff;">Parto</th>
+                    <th colspan="2" class="cabecera-secado">Secado</th>
+                    <th colspan="2" class="cabecera-parto">Parto</th>
+                    <th colspan="2" class="cabecera-destete">Destete</th>
                 </tr>
                 <!-- Subcabecera con el detalle -->
                 <tr>
@@ -38,11 +39,13 @@
                     <th>Vaca</th>
                     <th>Fecha</th>
                     <th>Vaca</th>
+                    <th>Fecha</th>
+                    <th>Cría / Referencia</th>
                 </tr>
             </thead>
             <tbody>
-                <!-- Bucle que recorre las filas emparejadas en Python -->
-                {% for secado, parto in mes_data.filas %}
+                <!-- Bucle que recorre las tres filas emparejadas -->
+                {% for secado, parto, destete in mes_data.filas %}
                 <tr>
                     
                     <!-- Columna Izquierda: Datos de Secado -->
@@ -54,10 +57,26 @@
                         <td>-</td>
                     {% endif %}
 
-                    <!-- Columna Derecha: Datos de Parto -->
+                    <!-- Columna Central: Datos de Parto -->
                     {% if parto %}
                         <td>{{ parto.estimacion_parto|date:"d/m/y" }}</td>
                         <td>Nº {{ parto.vaca.numero_casa }}</td>
+                    {% else %}
+                        <td>-</td>
+                        <td>-</td>
+                    {% endif %}
+
+                    <!-- Columna Derecha: Datos de Destete -->
+                    {% if destete %}
+                        <td>{{ destete.fecha_destete|date:"d/m/y" }}</td>
+                        <td>
+                            <!-- Si la cría es hembra y tiene número, lo mostramos. Si no, ponemos de qué madre es hija -->
+                            {% if destete.genero_cria == 'HEMBRA' and destete.numero_casa_cria %}
+                                Cría Nº {{ destete.numero_casa_cria }}
+                            {% else %}
+                                Macho de Nº {{ destete.madre.numero_casa }}
+                            {% endif %}
+                        </td>
                     {% else %}
                         <td>-</td>
                         <td>-</td>
@@ -69,7 +88,10 @@
         </table>
         
     {% empty %}
-        <p>No hay estimaciones pendientes para la fecha seleccionada.</p>
+        <div class="contenedor-formulario contenedor-sin-resultados">
+            <h3 class="titulo-error">No hay estimaciones pendientes</h3>
+            <p>No se han encontrado tareas para las fechas seleccionadas.</p>
+        </div>
     {% endfor %}
 
 {% endblock %}
