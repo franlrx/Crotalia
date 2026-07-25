@@ -1,0 +1,31 @@
+{% extends 'ganaderia/base.html' %}
+
+{% block content %}
+<div class="contenedor-formulario">
+    <h2 class="titulo-formulario">+ Registrar Nueva Inseminación</h2>
+    
+    <form method="POST" class="formulario-estilizado">
+        {% csrf_token %}
+        
+        <p>
+            <label for="{{ form.fecha.id_for_label }}">Fecha de Inseminación:</label>
+            {{ form.fecha }}
+        </p>
+        
+        <p>
+            <label for="{{ form.vaca.id_for_label }}">Vaca (Nº Casa):</label>
+            {{ form.vaca }}
+        </p>
+
+        <p>
+            <label for="{{ form.toro.id_for_label }}">Toro (Nombre o Referencia):</label>
+            {{ form.toro }}
+        </p>
+
+        <div class="acciones-formulario">
+            <a href="{% url 'ganaderia:lista_inseminaciones' %}" class="btn-cancelar">Cancelar</a>
+            <button type="submit" class="btn-accion btn-añadir">Guardar Inseminación</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

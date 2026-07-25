@@ -3,6 +3,23 @@
 {% block content %}
     <h2>Calendario de Tareas (Secados y Partos)</h2>
 
+    <!-- NUEVA BARRA DE FILTROS POR MES -->
+    <div class="barra-filtros">
+        <form method="GET" action="{% url 'ganaderia:lista_estimaciones' %}">
+            <label for="mes">Filtrar por mes:</label>
+            <select name="mes" id="mes">
+                <option value="">Mostrar todo el calendario</option>
+                <!-- Generamos las opciones dinámicamente según los meses que tengan tareas -->
+                {% for opcion in opciones_meses %}
+                    <option value="{{ opcion.value }}" {% if mes_seleccionado == opcion.value %}selected{% endif %}>
+                        {{ opcion.titulo }}
+                    </option>
+                {% endfor %}
+            </select>
+            <button type="submit" class="btn-accion btn-filtrar">Aplicar Filtro</button>
+        </form>
+    </div>
+
     {% for mes_data in estimaciones_agrupadas %}
         
         <!-- Título del mes (Ej: Julio 2026) -->
@@ -52,9 +69,7 @@
         </table>
         
     {% empty %}
-        <p>No hay estimaciones pendientes registradas.</p>
+        <p>No hay estimaciones pendientes para la fecha seleccionada.</p>
     {% endfor %}
 
-    <br>
-    <a href="{% url 'ganaderia:inicio' %}">Volver al menú principal</a>
 {% endblock %}

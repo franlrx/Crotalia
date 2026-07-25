@@ -24,5 +24,9 @@ urlpatterns = [
     path('buscar/', views.buscar_vaca, name='buscar_vaca'),
 
     path('vacas/crear/', views.crear_vaca, name='crear_vaca'),
-    path('vacas/eliminar/<int:vaca_id>/', views.eliminar_vaca, name='eliminar_vaca')
+    path('vacas/eliminar/<int:vaca_id>/', views.eliminar_vaca, name='eliminar_vaca'),
+
+    # Rutas para crear y actualizar inseminaciones
+    path('inseminaciones/crear/', views.crear_inseminacion, name='crear_inseminacion'),
+    path('inseminaciones/estado/<int:inseminacion_id>/<str:nuevo_estado>/', views.actualizar_estado_inseminacion, name='actualizar_estado_inseminacion'),
 ]

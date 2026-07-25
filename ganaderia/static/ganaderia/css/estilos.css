@@ -19,7 +19,7 @@ header {
     background-color: #ffffff;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     padding: 15px 40px;
-    margin-bottom: 40px;
+    margin-bottom: 0px;
 }
 
 header table {
@@ -64,13 +64,11 @@ button:hover {
 /* ========================================= */
 
 .disposicion-principal {
-    display: flex;               /* Coloca el menú y el contenido lado a lado */
-    flex: 1;                     /* Empuja el footer hacia abajo */
+    display: flex;               
+    flex: 1;                     
     width: 100%;
-    max-width: 1200px;           /* Ancho máximo de la aplicación */
-    margin: 0 auto;
-    padding: 0 20px;
-    gap: 30px;                   /* Separación de 30px entre el menú y la tabla */
+    padding: 0 40px 0 0;             /* Igualamos los 40px de margen lateral que tiene la cabecera */
+    gap: 30px;
 }
 
 /* --- CAJA DEL MENÚ LATERAL --- */
@@ -79,16 +77,20 @@ button:hover {
 .menu-lateral {
     width: 250px;
     background-color: #ffffff;
-    border: 1px solid #e1e5eb;
-    border-radius: 12px;
-    padding: 10px 0;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.04);
     
-    /* MAGIA PARA DEJARLO FIJO A LO LARGO DE LA PANTALLA */
+    /* Diseño plano de panel lateral */
+    border-right: 1px solid #dcdde1; /* Solo línea separadora a la derecha */
+    border-left: none;
+    border-top: none;
+    border-bottom: none;
+    border-radius: 0;                /* Completamente recto */
+    box-shadow: none;                /* Eliminamos la sombra para un aspecto más limpio */
+    
+    padding: 20px 0;                 /* Un poco más de aire por arriba y por abajo */
+    
+    /* Configuración fija (Sticky) */
     position: sticky;
-    top: 20px;
-    align-self: flex-start;      /* CLAVE: Obligatorio en Flexbox para que funcione el sticky */
-    height: calc(100vh - 180px); /* Descontamos aprox. los 160px de la cabecera para no generar scroll */
+    top: 0;
     overflow-y: auto;
 }
 
@@ -98,42 +100,60 @@ button:hover {
     background: transparent; 
 }
 
+/* --- COMPORTAMIENTO DEL CONTENEDOR DE ENLACES --- */
+.menu-lateral nav {
+    position: sticky;
+    top: 0; 
+    /* Le damos casi toda la altura de la pantalla (descontando la cabecera) */
+    height: calc(100vh - 120px); 
+    display: flex;
+    flex-direction: column;
+}
+
 .menu-lateral nav ul {
-    list-style: none;            /* Quitamos los puntos negros de la lista */
+    list-style: none;
     margin: 0;
     padding: 0;
+    height: 100%;            /* Le decimos que ocupe todo el nav */
+    display: flex;
+    flex-direction: column;  /* Apilamos los botones en vertical */
 }
 
 .menu-lateral nav ul li {
-    border-bottom: 1px solid #f4f7f6; /* Línea gris muy suave entre opciones */
+    border-bottom: 1px solid #f4f7f6;
+    flex: 1;                 /* ¡LA MAGIA! Hace que cada botón crezca para rellenar el espacio sobrante */
+    display: flex;           /* Necesario para centrar el texto dentro del bloque estirado */
 }
 
 .menu-lateral nav ul li:last-child {
-    border-bottom: none;         /* La última opción no necesita línea debajo */
+    border-bottom: none;
 }
 
-/* --- BOTONES DEL MENÚ --- */
+/* --- DISEÑO DE LOS BOTONES --- */
 .menu-lateral nav ul li a {
-    display: block;              /* Hace que toda la fila sea clickeable, no solo el texto */
+    width: 100%;
+    display: flex;           /* Usamos Flexbox dentro del enlace */
+    align-items: center;     /* Centramos el icono y el texto verticalmente en su nuevo bloque gigante */
     padding: 15px 20px;
-    color: #555;                 /* Gris oscuro para el texto inactivo */
+    color: #555;
     text-decoration: none;
     font-weight: 600;
     font-size: 15px;
-    transition: all 0.2s ease;   /* Animación suave para el hover */
+    transition: all 0.2s ease;
 }
 
-/* Efecto al pasar el ratón */
+/* El efecto al pasar el ratón se mantiene intacto */
 .menu-lateral nav ul li a:hover {
-    background-color: #f8faf9;   /* Fondo ligeramente gris al hacer hover */
-    color: #2980b9;              /* El texto se vuelve azul corporativo */
-    padding-left: 26px;          /* Desplaza el texto 6px a la derecha dando un efecto dinámico */
+    background-color: #f8faf9;
+    color: #2980b9;
+    padding-left: 23px;          
+    border-left: 3px solid #2980b9; 
 }
-
 /* --- ZONA DEL CONTENIDO (TABLAS, FORMULARIOS) --- */
 .contenido-central {
-    flex: 1;                     /* Ocupa automáticamente todo el espacio libre a la derecha */
-    min-width: 0;                /* Truco vital: Evita que una tabla ancha rompa el diseño Flexbox */
+    flex: 1;                     
+    min-width: 0;                
+    padding: 40px 30px 40px 40px; /* Arriba 40px, Derecha 30px, Abajo 40px, Izquierda 40px */
 }
 
 .contenido-central > h2 {
@@ -421,4 +441,72 @@ footer small {
     background-color: #7f8c8d;
     color: #ffffff;
     transform: translateY(-1px);
+}
+
+/* Título principal dentro de las cajas de formulario */
+.titulo-formulario {
+    text-align: center;
+    color: #2c3e50;
+    margin-bottom: 20px;
+}
+
+/* ========================================= */
+/* 8. ESTILOS DE ESTADOS E INSEMINACIONES    */
+/* ========================================= */
+
+/* Ajuste de celdas para que los botones queden pegados */
+.celda-ajustada {
+    width: 1%;
+}
+
+/* Botón Positivo (Verde) */
+.btn-positivo {
+    background-color: #27ae60;
+    color: white;
+    border-radius: 4px;
+    padding: 4px 10px;
+}
+
+.btn-positivo:hover {
+    background-color: #219150; /* Verde más oscuro al pasar el ratón */
+}
+
+/* Botón Negativo (Rojo) */
+.btn-negativo {
+    background-color: #ff3b30;
+    color: white;
+    border-radius: 4px;
+    padding: 4px 10px;
+}
+
+.btn-negativo:hover {
+    background-color: #cc2e26; /* Rojo más oscuro al pasar el ratón */
+}
+
+/* Indicador de "En Calendario" */
+.celda-calendario {
+    text-align: right;
+    padding-right: 15px;
+}
+
+.texto-calendario {
+    color: #27ae60;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.barra-filtros select {
+    padding: 8px 12px;
+    border: 1px solid #ccd1d9;
+    border-radius: 6px;
+    font-size: 14px;
+    color: #333;
+    background-color: #ffffff;
+    transition: border-color 0.3s;
+    cursor: pointer;
+}
+
+.barra-filtros select:focus {
+    border-color: #2980b9;
+    outline: none;
 }
