@@ -52,4 +52,7 @@ urlpatterns = [
         next_page='/', 
         redirect_authenticated_user=True
     )), name='login'),
+
+    # Ruta para cerrar sesión correctamente
+    path('logout/', auth_views.LogoutView.as_view(), name='logout'),
 ]
