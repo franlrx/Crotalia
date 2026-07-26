@@ -48,6 +48,6 @@ urlpatterns = [
     # Ruta para el inicio de sesión público
     path('login/', auth_views.LoginView.as_view(
         template_name='ganaderia/login.html',
-        next_page='/inicio/' # Hacia dónde va tras loguearse (ajusta si tu ruta se llama distinto)
+        next_page='/' # Hacia dónde va tras loguearse (ajusta si tu ruta se llama distinto)
     ), name='login'),
 ]

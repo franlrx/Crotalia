@@ -139,3 +139,6 @@ CSRF_TRUSTED_ORIGINS = [
 
 # Indicarle a Django que Render usa un proxy HTTPS seguro
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/login/'
