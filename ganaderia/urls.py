@@ -1,6 +1,7 @@
 from django.urls import path
 from . import views
 from django.contrib.auth import views as auth_views
+from django.views.decorators.cache import never_cache
 
 # Definimos el nombre de la aplicación para organizar bien las rutas internamente
 app_name = 'ganaderia'
@@ -46,9 +47,9 @@ urlpatterns = [
     ), name='cambiar_password_hecho'),
 
     # Ruta para el inicio de sesión público
-    path('login/', auth_views.LoginView.as_view(
+    path('login/', never_cache(auth_views.LoginView.as_view(
         template_name='ganaderia/login.html',
-        next_page='/', # Hacia dónde va tras loguearse (ajusta si tu ruta se llama distinto)
+        next_page='/', 
         redirect_authenticated_user=True
-    ), name='login'),
+    )), name='login'),
 ]
