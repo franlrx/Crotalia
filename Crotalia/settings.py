@@ -131,3 +131,11 @@ STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# Dominios confiables para aceptar peticiones POST en producción
+CSRF_TRUSTED_ORIGINS = [
+    'https://crotalia-app.onrender.com',
+]
+
+# Indicarle a Django que Render usa un proxy HTTPS seguro
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
