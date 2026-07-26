@@ -1,0 +1,23 @@
+{% extends 'ganaderia/base.html' %}
+
+{% block menu_lateral %}
+<!-- Dejamos el menú vacío en la pantalla de login para que no puedan navegar sin entrar -->
+{% endblock %}
+
+{% block content %}
+<div class="contenedor-formulario" style="margin-top: 50px;">
+    <h2 class="titulo-formulario">Bienvenido a Crotalia</h2>
+    <p style="text-align: center; color: #666; margin-bottom: 30px;">Inicia sesión con tu cuenta de ganadería</p>
+    
+    <form method="POST" class="formulario-estilizado">
+        {% csrf_token %}
+        
+        <!-- Django renderiza el usuario y contraseña automáticamente -->
+        {{ form.as_p }}
+
+        <div class="acciones-formulario" style="justify-content: center;">
+            <button type="submit" class="btn-accion btn-añadir" style="width: 100%; padding: 12px; font-size: 16px;">Iniciar Sesión</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

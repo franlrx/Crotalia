@@ -9,11 +9,11 @@ from datetime import date, timedelta
 # ==========================================
 # PANTALLA PRINCIPAL Y BUSCADOR
 # ==========================================
-@login_required(login_url='/admin/login/')
+@login_required(login_url='/login/')
 def inicio(request):
     return render(request, 'ganaderia/inicio.html')
 
-@login_required(login_url='/admin/login/')
+@login_required(login_url='/login/')
 def buscar_vaca(request):
     granja_usuario = request.user.perfil.granja
     query = request.GET.get('q') 
@@ -23,7 +23,7 @@ def buscar_vaca(request):
 # ==========================================
 # LISTAS DE DATOS (AISLADAS POR GRANJA)
 # ==========================================
-@login_required(login_url='/admin/login/')
+@login_required(login_url='/login/')
 def lista_vacas(request):
     granja_usuario = request.user.perfil.granja
     vacas_autorizadas = Vaca.objects.filter(granja=granja_usuario).order_by('-fecha_nacimiento')
@@ -34,7 +34,7 @@ def lista_vacas(request):
     }
     return render(request, 'ganaderia/lista_vacas.html', contexto)
 
-@login_required(login_url='/admin/login/')
+@login_required(login_url='/login/')
 def lista_partos(request):
     granja_usuario = request.user.perfil.granja
     partos_autorizados = Parto.objects.filter(madre__granja=granja_usuario).order_by('-fecha_real')
@@ -45,7 +45,7 @@ def lista_partos(request):
     }
     return render(request, 'ganaderia/lista_partos.html', contexto)
 
-@login_required(login_url='/admin/login/')
+@login_required(login_url='/login/')
 def lista_inseminaciones(request):
     granja_usuario = request.user.perfil.granja
     inseminaciones_autorizadas = Inseminacion.objects.filter(vaca__granja=granja_usuario).order_by('-fecha')
@@ -67,7 +67,7 @@ def lista_inseminaciones(request):
     }
     return render(request, 'ganaderia/lista_inseminaciones.html', contexto)
 
-@login_required(login_url='/admin/login/')
+@login_required(login_url='/login/')
 def lista_estimaciones(request):
     granja_usuario = request.user.perfil.granja
     estimaciones = Inseminacion.objects.filter(vaca__granja=granja_usuario, estado='POSITIVO')
@@ -140,6 +140,7 @@ def lista_estimaciones(request):
     })
 
 # VISTA PARA CREAR VACA (Por ahora solo cargará la pantalla)
+@login_required(login_url='/login/')
 def crear_vaca(request):
     if request.method == 'POST':
         form = VacaForm(request.POST)
@@ -155,7 +156,7 @@ def crear_vaca(request):
     # ¡ESTA ES LA LÍNEA CLAVE QUE TE FALTABA! El diccionario {'form': form} es el que envía los datos al HTML
     return render(request, 'ganaderia/crear_vaca.html', {'form': form})
 
-@login_required(login_url='/admin/login/')
+@login_required(login_url='/login/')
 def editar_vaca(request, vaca_id):
     # Recuperamos la vaca asegurándonos de que pertenece a la granja del usuario
     vaca = get_object_or_404(Vaca, id=vaca_id, granja=request.user.perfil.granja)
@@ -177,6 +178,7 @@ def editar_vaca(request, vaca_id):
     return render(request, 'ganaderia/editar_vaca.html', {'form': form, 'vaca': vaca})
 
 # VISTA PARA ELIMINAR VACA
+@login_required(login_url='/login/')
 def eliminar_vaca(request, vaca_id):
     # Por seguridad, solo borramos si la petición llega por POST (al hacer clic en el botón)
     if request.method == 'POST':
@@ -189,7 +191,7 @@ def eliminar_vaca(request, vaca_id):
 # GESTIÓN DE INSEMINACIONES
 # ==========================================
 
-@login_required(login_url='/admin/login/')
+@login_required(login_url='/login/')
 def crear_inseminacion(request):
     if request.method == 'POST':
         form = InseminacionForm(request.POST)
@@ -206,7 +208,7 @@ def crear_inseminacion(request):
     return render(request, 'ganaderia/crear_inseminacion.html', {'form': form})
 
 
-@login_required(login_url='/admin/login/')
+@login_required(login_url='/login/')
 def actualizar_estado_inseminacion(request, inseminacion_id, nuevo_estado):
     if request.method == 'POST':
         # Buscamos la inseminación asegurándonos de que es de una vaca de esta granja (por seguridad)
@@ -223,7 +225,7 @@ def actualizar_estado_inseminacion(request, inseminacion_id, nuevo_estado):
             
     return redirect('ganaderia:lista_inseminaciones')
 
-@login_required(login_url='/admin/login/')
+@login_required(login_url='/login/')
 def crear_parto(request):
     if request.method == 'POST':
         form = PartoForm(request.POST)
@@ -240,7 +242,7 @@ def crear_parto(request):
 
     return render(request, 'ganaderia/crear_parto.html', {'form': form})
 
-@login_required(login_url='/admin/login/')
+@login_required(login_url='/login/')
 def buscar_vaca(request):
     granja_usuario = request.user.perfil.granja
     query = request.GET.get('q', '') 
@@ -256,7 +258,7 @@ def buscar_vaca(request):
 
     return render(request, 'ganaderia/resultados_busqueda.html', {'vacas': resultados, 'query': query})
 
-@login_required(login_url='/admin/login/')
+@login_required(login_url='/login/')
 def inicio(request):
     granja_usuario = request.user.perfil.granja
     

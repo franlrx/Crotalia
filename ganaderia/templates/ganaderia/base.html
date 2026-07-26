@@ -15,32 +15,39 @@
         <div class="cabecera-contenedor">
             <!-- Zona Izquierda: Logo y botón hamburguesa -->
             <div class="zona-logo">
-                <button id="btn-menu-movil" class="btn-hamburguesa">☰</button>
+                <!-- Solo mostramos la hamburguesa si hay sesión iniciada -->
+                {% if user.is_authenticated %}
+                    <button id="btn-menu-movil" class="btn-hamburguesa">☰</button>
+                {% endif %}
+                
                 <a href="{% url 'ganaderia:inicio' %}">
                     <img src="{% static 'ganaderia/images/logo_crotalia.png' %}" alt="Logo Crotalia" height="90">
                 </a>
             </div>
             
-            <!-- Zona Centro: Buscador -->
-            <div class="zona-buscador">
-                <form action="{% url 'ganaderia:buscar_vaca' %}" method="GET">
-                    <label for="input_buscar"><strong>Buscar Vaca:</strong></label>
-                    <input type="text" id="input_buscar" name="q" placeholder="Nº de Casa (Ej: 12B)" required>
-                    <button type="submit">Buscar</button>
-                </form>
-            </div>
-
-            <!-- Zona Derecha: Botones de Cuenta y Sesión -->
-            <div class="zona-acciones">
-                <div class="contenedor-botones-sesion">
-                    <a href="{% url 'ganaderia:cambiar_password' %}" class="btn-sesion">Cambiar Contraseña</a>
-                    
-                    <form action="{% url 'admin:logout' %}?next=/" method="POST">
-                        {% csrf_token %}
-                        <button type="submit" class="btn-sesion">Cerrar Sesión</button>
+            <!-- Todo este bloque solo se renderiza si el usuario está logueado -->
+            {% if user.is_authenticated %}
+                <!-- Zona Centro: Buscador -->
+                <div class="zona-buscador">
+                    <form action="{% url 'ganaderia:buscar_vaca' %}" method="GET">
+                        <label for="input_buscar"><strong>Buscar Vaca:</strong></label>
+                        <input type="text" id="input_buscar" name="q" placeholder="Nº de Casa (Ej: 12B)" required>
+                        <button type="submit">Buscar</button>
                     </form>
                 </div>
-            </div>
+
+                <!-- Zona Derecha: Botones de Cuenta y Sesión -->
+                <div class="zona-acciones">
+                    <div class="contenedor-botones-sesion">
+                        <a href="{% url 'ganaderia:cambiar_password' %}" class="btn-sesion">Cambiar Contraseña</a>
+                        
+                        <form action="{% url 'admin:logout' %}?next=/" method="POST">
+                            {% csrf_token %}
+                            <button type="submit" class="btn-sesion">Cerrar Sesión</button>
+                        </form>
+                    </div>
+                </div>
+            {% endif %}
         </div>
     </header>
 
@@ -93,7 +100,7 @@
                 <p>
                     Soporte Técnico: 
                     📞 <a href="tel:+34689713312">+34 689713312</a> | 
-                    ✉️ <a href="mailto:crotalia@gmail.com">crotalia@gmail.com</a>
+                    ✉️ <a href="mailto:crotaliagestionganadera@gmail.com">crotaliagestionganadera@gmail.com</a>
                 </p>
             </div>
             
