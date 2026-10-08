@@ -5,7 +5,7 @@ from itertools import zip_longest
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import VacaForm, InseminacionForm, PartoForm
 from datetime import date, timedelta
-from django.db.models.functions import Length
+from django.db.models.functions import Length, RawSQL
 
 # ==========================================
 # PANTALLA PRINCIPAL Y BUSCADOR
@@ -28,11 +28,12 @@ def buscar_vaca(request):
 def lista_vacas(request):
     granja_usuario = request.user.perfil.granja
     
-    # Ordenamos primero por la longitud del número y luego por el valor alfanumérico
-    vacas_autorizadas = Vaca.objects.filter(granja=granja_usuario).order_by(
-        Length('numero_casa'),
-        'numero_casa'
-    )
+    # 1. SUBSTRING captura solo los números del principio (ej: '12B' -> '12', '002' -> '002')
+    # 2. ::integer los convierte en números matemáticos puros para PostgreSQL (12, 2)
+    # 3. Ordenamos primero por ese número puro y usamos el nombre completo para desempatar.
+    vacas_autorizadas = Vaca.objects.filter(granja=granja_usuario).annotate(
+        numero_puro=RawSQL("SUBSTRING(numero_casa FROM '^[0-9]+')::integer", [])
+    ).order_by('numero_puro', 'numero_casa')
     
     contexto = {
         'vacas': vacas_autorizadas,
