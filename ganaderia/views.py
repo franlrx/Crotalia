@@ -48,22 +48,30 @@ def lista_partos(request):
 @login_required(login_url='/login/')
 def lista_inseminaciones(request):
     granja_usuario = request.user.perfil.granja
-    inseminaciones_autorizadas = Inseminacion.objects.filter(vaca__granja=granja_usuario).exclude(estado='NEGATIVO').order_by('-fecha')
     
-    # --- NUEVA LÓGICA DE FILTRADO (HACE X DÍAS) ---
-    dias = request.GET.get('dias')
+    # Por defecto: cargamos todas las inseminaciones EXCEPTO las negativas
+    inseminaciones_autorizadas = Inseminacion.objects.filter(
+        vaca__granja=granja_usuario
+    ).exclude(estado='NEGATIVO').order_by('-fecha')
     
-    if dias and dias.isdigit():
-        dias_int = int(dias)
-        # Calculamos qué día era hace X días
-        fecha_limite = date.today() - timedelta(days=dias_int)
-        # Filtramos las inseminaciones que sean mayores o iguales a esa fecha
-        inseminaciones_autorizadas = inseminaciones_autorizadas.filter(fecha__gte=fecha_limite)
+    # --- NUEVA LÓGICA DE FILTRADO (DUDOSAS +35 DÍAS) ---
+    filtro_dudosas = request.GET.get('filtro_dudosas')
+    
+    if filtro_dudosas == 'on':
+        # Calculamos la fecha exacta de hace 35 días
+        fecha_limite = date.today() - timedelta(days=35)
+        
+        # Filtramos: Solo estado DUDOSO y que la fecha sea menor o igual (<=) a hace 35 días
+        inseminaciones_autorizadas = inseminaciones_autorizadas.filter(
+            estado='DUDOSO',
+            fecha__lte=fecha_limite
+        )
     
     contexto = {
         'inseminaciones': inseminaciones_autorizadas,
         'nombre_granja': granja_usuario.nombre,
-        'dias_seleccionados': dias # Lo enviamos para que el desplegable recuerde qué elegimos
+        # Pasamos esta variable al HTML para saber si el filtro está activado
+        'filtro_dudosas_activo': filtro_dudosas == 'on' 
     }
     return render(request, 'ganaderia/lista_inseminaciones.html', contexto)
 

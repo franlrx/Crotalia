@@ -8,25 +8,21 @@
     </div>
 
     <!-- NUEVA BARRA DE FILTROS POR DÍAS -->
-    <div class="barra-filtros">
-        <form method="GET" action="{% url 'ganaderia:lista_inseminaciones' %}">
-            
-            <label for="dias">Mostrar inseminaciones de:</label>
-            <select name="dias" id="dias">
-                <!-- Comprobamos qué valor nos devuelve la vista para dejarlo preseleccionado -->
-                <option value="" {% if not dias_seleccionados %}selected{% endif %}>Todas (Historial completo)</option>
-                <option value="15" {% if dias_seleccionados == '15' %}selected{% endif %}>Últimos 15 días</option>
-                <option value="21" {% if dias_seleccionados == '21' %}selected{% endif %}>Últimos 21 días (1 celo)</option>
-                <option value="30" {% if dias_seleccionados == '30' %}selected{% endif %}>Últimos 30 días</option>
-                <option value="60" {% if dias_seleccionados == '60' %}selected{% endif %}>Últimos 60 días</option>
-                <option value="90" {% if dias_seleccionados == '90' %}selected{% endif %}>Últimos 90 días</option>
-            </select>
-            
-            <button type="submit" class="btn-accion btn-filtrar">Aplicar Filtro</button>
-            
-        </form>
+   <div class="barra-filtros">
+        {% if filtro_dudosas_activo %}
+            <a href="{% url 'ganaderia:lista_inseminaciones' %}" class="btn-accion" style="background-color: #7f8c8d; text-decoration: none;">
+                ✖ Quitar filtro (Mostrando solo Dudosas +35 días)
+            </a>
+        {% else %}
+            <form method="GET" action="{% url 'ganaderia:lista_inseminaciones' %}">
+                <input type="hidden" name="filtro_dudosas" value="on">
+                <button type="submit" class="btn-accion btn-filtrar">
+                    🔍 Filtrar Pendientes de Confirmar (+35 días)
+                </button>
+            </form>
+        {% endif %}
     </div>
-
+    
     <table class="tabla-datos">
         <thead>
             <tr>
