@@ -8,9 +8,9 @@
     </div>
 
     <!-- NUEVA BARRA DE FILTROS POR DÍAS -->
-   <div class="barra-filtros">
+   <div class="barra-filtros" style="margin-bottom: 20px;">
         {% if filtro_dudosas_activo %}
-            <a href="{% url 'ganaderia:lista_inseminaciones' %}" class="btn-accion" style="background-color: #7f8c8d; text-decoration: none;">
+            <a href="{% url 'ganaderia:lista_inseminaciones' %}" class="btn-accion" style="background-color: #7f8c8d; color: white; text-decoration: none; display: inline-block;">
                 ✖ Quitar filtro (Mostrando solo Dudosas +35 días)
             </a>
         {% else %}
@@ -22,7 +22,7 @@
             </form>
         {% endif %}
     </div>
-    
+
     <table class="tabla-datos">
         <thead>
             <tr>
