@@ -5,7 +5,7 @@ from itertools import zip_longest
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import VacaForm, InseminacionForm, PartoForm
 from datetime import date, timedelta
-from django.db.models.functions import Length, RawSQL
+from django.db.models.expressions import RawSQL
 
 # ==========================================
 # PANTALLA PRINCIPAL Y BUSCADOR
