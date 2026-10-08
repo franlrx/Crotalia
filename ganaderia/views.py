@@ -5,6 +5,7 @@ from itertools import zip_longest
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import VacaForm, InseminacionForm, PartoForm
 from datetime import date, timedelta
+from django.db.models.functions import Length
 
 # ==========================================
 # PANTALLA PRINCIPAL Y BUSCADOR
@@ -26,7 +27,12 @@ def buscar_vaca(request):
 @login_required(login_url='/login/')
 def lista_vacas(request):
     granja_usuario = request.user.perfil.granja
-    vacas_autorizadas = Vaca.objects.filter(granja=granja_usuario).order_by('-fecha_nacimiento')
+    
+    # Ordenamos primero por la longitud del número y luego por el valor alfanumérico
+    vacas_autorizadas = Vaca.objects.filter(granja=granja_usuario).order_by(
+        Length('numero_casa'),
+        'numero_casa'
+    )
     
     contexto = {
         'vacas': vacas_autorizadas,
