@@ -48,7 +48,7 @@ def lista_partos(request):
 @login_required(login_url='/login/')
 def lista_inseminaciones(request):
     granja_usuario = request.user.perfil.granja
-    inseminaciones_autorizadas = Inseminacion.objects.filter(vaca__granja=granja_usuario).order_by('-fecha')
+    inseminaciones_autorizadas = Inseminacion.objects.filter(vaca__granja=granja_usuario).exclude(estado='NEGATIVO').order_by('-fecha')
     
     # --- NUEVA LÓGICA DE FILTRADO (HACE X DÍAS) ---
     dias = request.GET.get('dias')
@@ -215,8 +215,9 @@ def actualizar_estado_inseminacion(request, inseminacion_id, nuevo_estado):
         inseminacion = get_object_or_404(Inseminacion, id=inseminacion_id, vaca__granja=request.user.perfil.granja)
         
         if nuevo_estado == 'NEGATIVO':
-            # Si fracasa, borramos el registro para mantener la base de datos limpia
-            inseminacion.delete()
+            # GUARDAMOS EL REGISTRO (para las estadísticas) pero le cambiamos el estado
+            inseminacion.estado = 'NEGATIVO'
+            inseminacion.save()
         elif nuevo_estado == 'POSITIVO':
             # Si es éxito, cambiamos el estado. Al hacer .save(), tu archivo models.py 
             # calculará automáticamente las fechas de secado y parto.
