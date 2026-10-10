@@ -10,13 +10,15 @@
 
 body {
     font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    background-color: #f4f7f6; 
+    background-color: #f4f7f6;
     color: #333;
     display: flex;
     flex-direction: column;
-    /* FIJAMOS LA PANTALLA: Bloqueamos el scroll general del navegador */
-    height: 100vh; 
-    overflow: hidden;
+    /* Cambiamos height fijo por min-height para que crezca si hay contenido */
+    min-height: 100vh; 
+    /* Permitimos el scroll vertical fluido en móviles */
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch; 
 }
 
 /* ========================================= */
