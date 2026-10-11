@@ -91,6 +91,7 @@ button:hover {
     position: sticky;
     top: 70px; /* La altura aproximada de tu cabecera */
     height: calc(100vh - 70px); /* 100% de la pantalla MENOS los 70px de la cabecera */
+    align-self: flex-start; /* Evita que el menú se estire verticalmente */
     overflow-y: auto;   /* Scroll propio solo si tienes muchísimos enlaces en el menú */
 }
 
