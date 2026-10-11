@@ -17,13 +17,33 @@
         <!-- ============================== -->
         <!-- BOTONES DE ACCIÓN RÁPIDA       -->
         <!-- ============================== -->
-        <div style="margin-top: 15px; margin-bottom: 20px; display: flex; gap: 10px; flex-wrap: wrap;">
-            <a href="{% url 'ganaderia:crear_parto_vaca' vaca.id %}" style="background-color: #28a745; color: white; padding: 10px 15px; text-decoration: none; border-radius: 5px; font-weight: bold; border: 1px solid #218838;">
-                🍼 Registrar Parto
-            </a>
-            <a href="{% url 'ganaderia:crear_inseminacion_vaca' vaca.id %}" style="background-color: #007bff; color: white; padding: 10px 15px; text-decoration: none; border-radius: 5px; font-weight: bold; border: 1px solid #0069d9;">
-                💉 Registrar Inseminación
-            </a>
+        <div style="margin-top: 15px; margin-bottom: 20px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 15px;">
+            
+            <!-- GRUPO IZQUIERDO: Registros -->
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                <a href="{% url 'ganaderia:crear_parto_vaca' vaca.id %}" style="background-color: #28a745; color: white; padding: 10px 15px; text-decoration: none; border-radius: 5px; font-weight: bold; border: 1px solid #218838; display: inline-block;">
+                    🍼 Registrar Parto
+                </a>
+                <a href="{% url 'ganaderia:crear_inseminacion_vaca' vaca.id %}" style="background-color: #007bff; color: white; padding: 10px 15px; text-decoration: none; border-radius: 5px; font-weight: bold; border: 1px solid #0069d9; display: inline-block;">
+                    💉 Registrar Inseminación
+                </a>
+            </div>
+
+            <!-- GRUPO DERECHO: Edición y Borrado -->
+            <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
+                <a href="{% url 'ganaderia:editar_vaca' vaca.id %}" style="background-color: #f39c12; color: white; padding: 10px 15px; text-decoration: none; border-radius: 5px; font-weight: bold; border: 1px solid #d68910; display: inline-block;">
+                    ✏️ Editar Vaca
+                </a>
+                
+                <!-- El botón eliminar va dentro de un formulario por seguridad (POST) -->
+                <form action="{% url 'ganaderia:eliminar_vaca' vaca.id %}" method="POST" style="margin: 0;" onsubmit="return confirm('¿Estás seguro de que deseas eliminar esta vaca? Se borrará también todo su historial de partos e inseminaciones.');">
+                    {% csrf_token %}
+                    <button type="submit" style="background-color: #dc3545; color: white; padding: 10px 15px; border-radius: 5px; font-weight: bold; border: 1px solid #c82333; cursor: pointer; font-size: 15px; display: inline-block; font-family: inherit;">
+                        🗑️ Eliminar
+                    </button>
+                </form>
+            </div>
+            
         </div>
 
         <!-- ============================== -->
