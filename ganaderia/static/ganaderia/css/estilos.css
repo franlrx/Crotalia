@@ -90,7 +90,6 @@ button:hover {
     width: 250px;
     background-color: #ffffff;
     border-right: 1px solid #dcdde1; 
-    height: 100%;       /* Ocupa todo el alto disponible de su contenedor */
     overflow-y: auto;   /* Scroll propio solo si tienes muchísimos enlaces en el menú */
 }
 
