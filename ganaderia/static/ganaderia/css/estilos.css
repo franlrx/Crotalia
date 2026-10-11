@@ -28,7 +28,9 @@ header {
     padding: 15px 40px;
     margin-bottom: 0px;
     flex-shrink: 0; /* Evita que la cabecera se aplaste al encoger la pantalla */
-    z-index: 10;    /* Mantiene la sombra siempre visible sobre el contenido */
+    position: sticky; /* Mantiene la cabecera visible al hacer scroll */
+    top: 0;          /* Se pega a la parte superior de la ventana */
+    z-index: 20;    /* Mantiene la sombra siempre visible sobre el contenido */
 }
 
 header table {
@@ -86,6 +88,9 @@ button:hover {
     width: 250px;
     background-color: #ffffff;
     border-right: 1px solid #dcdde1; 
+    position: sticky;
+    top: 70px; /* La altura aproximada de tu cabecera */
+    height: calc(100vh - 70px); /* 100% de la pantalla MENOS los 70px de la cabecera */
     overflow-y: auto;   /* Scroll propio solo si tienes muchísimos enlaces en el menú */
 }
 
