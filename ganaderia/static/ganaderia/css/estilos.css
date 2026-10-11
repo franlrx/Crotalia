@@ -152,8 +152,17 @@ button:hover {
     flex: 1;                     
     min-width: 0;                
     height: 100%;
-    overflow-y: auto;             /* SCROLL INDEPENDIENTE PARA ESTA SECCIÓN */
+    overflow-y: auto;             /* El scroll funciona perfecto aquí */
     padding: 40px 30px 40px 40px; 
+    
+    /* AÑADIDO: Permite empujar el footer al fondo */
+    display: flex;
+    flex-direction: column;
+}
+
+/* Evita que tu contenido normal se aplaste */
+.contenido-central > * {
+    flex-shrink: 0;
 }
 
 .contenido-central > h2 {
@@ -648,27 +657,19 @@ button:hover {
 /* 16. PIE DE PÁGINA (FOOTER)                */
 /* ========================================= */
 
-/* ========================================= */
-/* 16. PIE DE PÁGINA (FOOTER)                */
-/* ========================================= */
-
 footer {
     background-color: #2c3e50;
     color: #ecf0f1;
     padding: 20px 40px;
     font-size: 15px;
     
-    /* 1. Lo apartamos para dejar el hueco exacto del menú lateral */
-    margin-left: 250px;
-    
-    /* 2. Le decimos que ocupe el resto del espacio de la pantalla */
-    width: calc(100% - 250px);
-    
-    /* 3. Lo empujamos al fondo de la página (por si la lista de contenido es corta) */
+    /* 1. Lo empuja al final de la lista de vacas */
     margin-top: auto;
     
-    /* 4. Evitamos que se aplaste o se deforme */
-    flex-shrink: 0;
+    /* 2. Anula el padding del contenedor para tocar los bordes */
+    margin-left: -40px;  
+    margin-right: -30px; 
+    margin-bottom: -40px; 
 }
 
 .footer-contenido {
