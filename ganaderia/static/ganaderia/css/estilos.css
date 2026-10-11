@@ -15,9 +15,7 @@ body {
     display: flex;
     flex-direction: column;
     
-    /* ESTO ES LO NUEVO: Fija la app al 100% de la pantalla y bloquea el scroll general */
-    height: 100vh; 
-    overflow: hidden; 
+    min-height: 100vh;
 }
 
 /* ========================================= */
@@ -81,7 +79,6 @@ button:hover {
     display: flex;               
     flex: 1;                     
     width: 100%;
-    overflow: hidden; /* Clave: Delimita el espacio para que los hijos hagan scroll interno */
 }
 
 /* --- CAJA DEL MENÚ LATERAL --- */
@@ -111,11 +108,13 @@ button:hover {
     padding: 0;
     display: flex;
     flex-direction: column; 
+    height: 100%;
 }
 
 .menu-lateral nav ul li {
     border-bottom: 1px solid #f4f7f6;
     display: flex; 
+    flex: 1;
 }
 
 .menu-lateral nav ul li:last-child {
@@ -149,8 +148,6 @@ button:hover {
 .contenido-central {
     flex: 1;                     
     min-width: 0;                
-    height: 100%;
-    overflow-y: auto;             /* SCROLL INDEPENDIENTE PARA ESTA SECCIÓN */
     padding: 40px 30px 40px 40px; 
 }
 
