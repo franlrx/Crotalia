@@ -110,14 +110,12 @@ button:hover {
     list-style: none;
     margin: 0;
     padding: 0;
-    height: 100%;
     display: flex;
     flex-direction: column; 
 }
 
 .menu-lateral nav ul li {
     border-bottom: 1px solid #f4f7f6;
-    flex: 1; 
     display: flex; 
 }
 
