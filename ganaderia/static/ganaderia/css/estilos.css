@@ -14,11 +14,10 @@ body {
     color: #333;
     display: flex;
     flex-direction: column;
-    /* Cambiamos height fijo por min-height para que crezca si hay contenido */
-    min-height: 100vh; 
-    /* Permitimos el scroll vertical fluido en móviles */
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch; 
+    
+    /* ESTO ES LO NUEVO: Fija la app al 100% de la pantalla y bloquea el scroll general */
+    height: 100vh; 
+    overflow: hidden; 
 }
 
 /* ========================================= */
@@ -723,6 +722,9 @@ footer small {
     /* 1. Protección contra el scroll horizontal de la página entera */
     body {
         overflow-x: hidden;
+
+        height: auto; /* Permitimos que la página haga scroll vertical en móvil */
+        overflow-y: auto;
     }
 
     /* 2. Cabecera y botones */
