@@ -657,6 +657,11 @@ button:hover {
 /* 16. PIE DE PÁGINA (FOOTER)                */
 /* ========================================= */
 
+/* LA MAGIA: Obliga a que el contenido que esté justo encima del footer siempre mantenga las distancias */
+.contenido-central > *:nth-last-child(2) {
+    margin-bottom: 50px;
+}
+
 footer {
     background-color: #2c3e50;
     color: #ecf0f1;
