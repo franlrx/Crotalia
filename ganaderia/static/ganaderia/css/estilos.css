@@ -648,14 +648,27 @@ button:hover {
 /* 16. PIE DE PÁGINA (FOOTER)                */
 /* ========================================= */
 
+/* ========================================= */
+/* 16. PIE DE PÁGINA (FOOTER)                */
+/* ========================================= */
+
 footer {
     background-color: #2c3e50;
     color: #ecf0f1;
     padding: 20px 40px;
-    margin-top: auto;     
     font-size: 15px;
-    width: 100%;          
-    flex-shrink: 0; /* Evita que el footer se aplaste */
+    
+    /* 1. Lo apartamos para dejar el hueco exacto del menú lateral */
+    margin-left: 250px;
+    
+    /* 2. Le decimos que ocupe el resto del espacio de la pantalla */
+    width: calc(100% - 250px);
+    
+    /* 3. Lo empujamos al fondo de la página (por si la lista de contenido es corta) */
+    margin-top: auto;
+    
+    /* 4. Evitamos que se aplaste o se deforme */
+    flex-shrink: 0;
 }
 
 .footer-contenido {
