@@ -38,8 +38,19 @@ class Vaca(models.Model):
 
     # La madre. Le ponemos blank=True y null=True por si compráis una vaca y no sabéis quién es la madre
     madre = models.ForeignKey('self', on_delete=models.SET_NULL, blank=True, null=True, related_name='hijas', verbose_name="Madre")
+    
+    # --- NUEVO: Campo de memoria para guardar el Nº de Casa de la madre ---
+    madre_historica = models.CharField(max_length=10, blank=True, null=True, verbose_name="Madre Histórica (Nº Casa)")
+
     # La fecha de nacimiento
     fecha_nacimiento = models.DateField(verbose_name="Fecha de Nacimiento")
+
+    # --- NUEVO: Función para copiar automáticamente el número antes de guardar ---
+    def save(self, *args, **kwargs):
+        # Si tiene una madre asignada, copiamos SOLO su número de casa
+        if self.madre:
+            self.madre_historica = self.madre.numero_casa
+        super().save(*args, **kwargs)
 
     class Meta:
         # ¡Regla de oro de bases de datos! Evita que existan dos vacas con el mismo número EN LA MISMA GRANJA

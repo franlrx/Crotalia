@@ -28,7 +28,7 @@
                     <td><strong>{{ vaca.numero_casa }}</strong></td>
                     <td>{{ vaca.crotal }}</td>
                     <td>{{ vaca.nombre_padre|default:"Desconocido" }}</td>
-                    <td>{{ vaca.madre.numero_casa|default:"Desconocida" }}</td>
+                    <td>{{ vaca.madre.numero_casa|default:vaca.madre_historica|default:"Desconocida" }}</td>
                     <td>{{ vaca.fecha_nacimiento|date:"d/m/Y" }}</td>
                     
                     <!-- La celda sigue aquí, pero el CSS le quitará el borde -->

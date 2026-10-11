@@ -63,7 +63,15 @@
                 <tr>
                     <td>{{ vaca.crotal }}</td>
                     <td>{{ vaca.nombre_padre|default:"-" }}</td>
-                    <td>{% if vaca.madre %}Nº {{ vaca.madre.numero_casa }}{% else %}Desconocida{% endif %}</td>
+                    <td>
+                        {% if vaca.madre %}
+                            Nº {{ vaca.madre.numero_casa }}
+                        {% elif vaca.madre_historica %}
+                            Nº {{ vaca.madre_historica }}
+                        {% else %}
+                            Desconocida
+                        {% endif %}
+                    </td>
                     <td>{{ vaca.fecha_nacimiento|date:"d/m/Y" }}</td>
                 </tr>
             </tbody>
