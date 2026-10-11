@@ -15,6 +15,18 @@
         </h3>
 
         <!-- ============================== -->
+        <!-- BOTONES DE ACCIÓN RÁPIDA       -->
+        <!-- ============================== -->
+        <div style="margin-top: 15px; margin-bottom: 20px; display: flex; gap: 10px; flex-wrap: wrap;">
+            <a href="{% url 'ganaderia:crear_parto_vaca' vaca.id %}" style="background-color: #28a745; color: white; padding: 10px 15px; text-decoration: none; border-radius: 5px; font-weight: bold; border: 1px solid #218838;">
+                🍼 Registrar Parto
+            </a>
+            <a href="{% url 'ganaderia:crear_inseminacion_vaca' vaca.id %}" style="background-color: #007bff; color: white; padding: 10px 15px; text-decoration: none; border-radius: 5px; font-weight: bold; border: 1px solid #0069d9;">
+                💉 Registrar Inseminación
+            </a>
+        </div>
+
+        <!-- ============================== -->
         <!-- 1. DATOS GENERALES             -->
         <!-- ============================== -->
         <h4 class="subtitulo-ficha">📋 Datos Generales</h4>

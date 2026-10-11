@@ -31,10 +31,12 @@ urlpatterns = [
 
     # Rutas para crear y actualizar inseminaciones
     path('inseminaciones/crear/', views.crear_inseminacion, name='crear_inseminacion'),
+    path('inseminaciones/crear/<int:vaca_id>/', views.crear_inseminacion, name='crear_inseminacion_vaca'), # <-- NUEVA
     path('inseminaciones/estado/<int:inseminacion_id>/<str:nuevo_estado>/', views.actualizar_estado_inseminacion, name='actualizar_estado_inseminacion'),
 
     # Ruta para crear un nuevo parto
     path('partos/crear/', views.crear_parto, name='crear_parto'),
+    path('partos/crear/<int:vaca_id>/', views.crear_parto, name='crear_parto_vaca'), # <-- NUEVA
 
     # Rutas para el cambio de contraseña
     path('perfil/cambiar-password/', auth_views.PasswordChangeView.as_view(

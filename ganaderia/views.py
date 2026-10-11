@@ -207,16 +207,25 @@ def eliminar_vaca(request, vaca_id):
 # ==========================================
 
 @login_required(login_url='/login/')
-def crear_inseminacion(request):
+def crear_inseminacion(request, vaca_id=None):
+    # Si recibimos un vaca_id por la URL, buscamos esa vaca (y aseguramos que sea de esta granja)
+    vaca_preseleccionada = None
+    if vaca_id:
+        vaca_preseleccionada = get_object_or_404(Vaca, id=vaca_id, granja=request.user.perfil.granja)
+
     if request.method == 'POST':
         form = InseminacionForm(request.POST)
         if form.is_valid():
             inseminacion = form.save(commit=False)
-            # La vaca ya pertenece a la granja, por lo que no necesitamos asignar la granja directamente a la inseminación
             inseminacion.save()
             return redirect('ganaderia:lista_inseminaciones')
     else:
-        form = InseminacionForm()
+        # Aquí está la magia: si hay vaca preseleccionada, la metemos en el 'initial'
+        if vaca_preseleccionada:
+            form = InseminacionForm(initial={'vaca': vaca_preseleccionada})
+        else:
+            form = InseminacionForm()
+            
         # Filtramos el desplegable para que solo salgan las vacas de tu granja
         form.fields['vaca'].queryset = Vaca.objects.filter(granja=request.user.perfil.granja)
 
@@ -242,17 +251,25 @@ def actualizar_estado_inseminacion(request, inseminacion_id, nuevo_estado):
     return redirect('ganaderia:lista_inseminaciones')
 
 @login_required(login_url='/login/')
-def crear_parto(request):
+def crear_parto(request, vaca_id=None):
+    # Si recibimos un vaca_id por la URL, buscamos esa madre
+    vaca_preseleccionada = None
+    if vaca_id:
+        vaca_preseleccionada = get_object_or_404(Vaca, id=vaca_id, granja=request.user.perfil.granja)
+
     if request.method == 'POST':
         form = PartoForm(request.POST)
         if form.is_valid():
-            # El método save() del modelo Parto ya se encarga de crear la cría en el censo
-            # si es hembra, por lo que aquí solo necesitamos guardarlo de forma normal.
             parto = form.save(commit=False)
             parto.save()
             return redirect('ganaderia:lista_partos')
     else:
-        form = PartoForm()
+        # Ojo aquí: en PartoForm el campo se llama 'madre', no 'vaca'
+        if vaca_preseleccionada:
+            form = PartoForm(initial={'madre': vaca_preseleccionada})
+        else:
+            form = PartoForm()
+            
         # Filtramos para que en el desplegable de madres solo salgan las vacas de tu granja
         form.fields['madre'].queryset = Vaca.objects.filter(granja=request.user.perfil.granja)
 
