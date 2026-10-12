@@ -45,12 +45,38 @@ class Vaca(models.Model):
     # La fecha de nacimiento
     fecha_nacimiento = models.DateField(verbose_name="Fecha de Nacimiento")
 
-    # --- NUEVO: Función para copiar automáticamente el número antes de guardar ---
     def save(self, *args, **kwargs):
-        # Si tiene una madre asignada, copiamos SOLO su número de casa
+        # 1. Comprobamos si la vaca es nueva (se está creando por primera vez)
+        es_nueva = self.pk is None
+
+        # 2. Sistema de memoria histórica (ya lo tenías)
         if self.madre:
             self.madre_historica = self.madre.numero_casa
+            
+        # 3. Guardamos la vaca en la base de datos primero
         super().save(*args, **kwargs)
+        
+        # 4. NUEVO: Automatización del parto
+        if es_nueva and self.madre:
+            # Importamos Parto internamente para evitar fallos de lectura en el archivo
+            from django.apps import apps
+            Parto = apps.get_model(self._meta.app_label, 'Parto')
+            
+            # Verificamos que el parto no se haya creado ya desde el otro formulario
+            parto_existe = Parto.objects.filter(
+                madre=self.madre, 
+                numero_casa_cria=self.numero_casa,
+                fecha_real=self.fecha_nacimiento
+            ).exists()
+            
+            if not parto_existe:
+                Parto.objects.create(
+                    fecha_real=self.fecha_nacimiento,
+                    madre=self.madre,
+                    nombre_padre=self.nombre_padre,
+                    genero_cria='HEMBRA',
+                    numero_casa_cria=self.numero_casa
+                )
 
     class Meta:
         # ¡Regla de oro de bases de datos! Evita que existan dos vacas con el mismo número EN LA MISMA GRANJA
